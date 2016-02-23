@@ -1,0 +1,40 @@
+{
+  "name": "oxidize",
+  "version": "1.0.0",
+  "description": "A tool for compiling documentation to markdown.",
+  "main": "src/oxidize.js",
+  "scripts": {
+    "build": "gulp build",
+    "lint": "eslint src/*.js",
+    "ci": "node --harmony unit/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickzuber/oxidize.git"
+  },
+  "author": "Nick Zuber <zuber.nicholas@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nickzuber/oxidize/issues"
+  },
+  "keywords": [
+    "documentation",
+    "doc",
+    "docs",
+    "markdown",
+    "md",
+    "compile"
+  ],
+  "homepage": "https://github.com/nickzuber/oxidize#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.13.3",
+    "gulp": "^3.9.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-header": "^1.7.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
+    "gulp-watch": "^4.3.5",
+    "tape": "^4.2.2"
+  }
+}
