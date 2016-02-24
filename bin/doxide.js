@@ -9,7 +9,8 @@ const fs = require('fs');
 // Set env to original cwd
 process.env.INIT_CWD = process.cwd();
 
-console.log(argv);
+// All files to process
+var allFiles = [];
 
 // Check argv for flags
 if(Object.getOwnPropertyNames(argv).length > 1){
@@ -49,22 +50,14 @@ function continueProcess(){
       isDirectory = !!fs.lstatSync(path).isDirectory();
     }catch(err){
       reportError('Given path does not exist or was unable to be located: \n'+err);
-      if(path.indexOf('*')){
+      if(path.indexOf('*')>-1){
         reportError('  If you\'re trying to use a wildcard (*) to relay every type of file within a directory, do not use it.');
         reportError('  Simply pass in the path to the directory and all the valid files will be compiled automatically.');
       }
       process.exit(1);
     }
     if(isDirectory){
-      console.log('searching directory: '+chalk.yellow(path));
-      var files = fs.readdirSync(path), slashIfNeeded, actualPath;
-      files.map(function(derivedFile){
-        if(validFilePath(derivedFile)){
-          slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
-          actualPath = path + slashIfNeeded + derivedFile;
-          console.log('found file: '+chalk.bold.yellow(actualPath));
-        }
-      });
+      recurseAllFilesInDirectory(path, allFiles);
     }
     var isFile = false;
     try{
@@ -75,12 +68,32 @@ function continueProcess(){
     }
     if(isFile){
       if(validFilePath(pathTokens)){
-        console.log('found file: '+chalk.bold.yellow(path));
+        allFiles.push(path);
       }else{
         console.log('Invalid file type:');
         reportError('  '+pathTokens[pathTokens.length-1]);
         console.log('For help use the --h or --help command.');
         process.exit(0);
+      }
+    }
+  });
+  // array of task files to parse
+  console.log(allFiles);
+  // extract contents, give it to lexer
+}
+
+function recurseAllFilesInDirectory(path, allFiles){
+  var slashIfNeeded, actualPath;
+  fs.readdirSync(path).map(function(derivedFile){
+    if(validFilePath(derivedFile)){
+      slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
+      actualPath = path + slashIfNeeded + derivedFile;
+      allFiles.push(actualPath);
+    }else{
+      slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
+      actualPath = path + slashIfNeeded + derivedFile;
+      if(fs.lstatSync(actualPath).isDirectory()){
+        recurseAllFilesInDirectory(actualPath, allFiles);
       }
     }
   });
@@ -109,7 +122,7 @@ function resolveFlag(flag){
 // TODO: custom flag for extra extensions
 function validFilePath(file){
   if(typeof file === 'string'){
-    var minimalSyntax = /(^[0-9a-zA-Z])(\w*)(.js)$/ig;
+    var minimalSyntax = /(([0-9a-zA-Z])+(:?\.)?)+(.js)$/ig;
     return file.match(minimalSyntax);
   }else if(file instanceof Array){
     if(!file.length){
