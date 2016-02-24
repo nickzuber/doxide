@@ -1,22 +1,22 @@
 {
-  "name": "oxidize",
+  "name": "doxide",
   "version": "1.0.0",
   "description": "A compiler for converting documentation in JavaScript files to markdown.",
-  "main": "./bin/oxidize.js",
+  "main": "./bin/doxide.js",
   "scripts": {
     "lint": "eslint ./bin/*.js"
   },
   "bin": {
-    "oxidize": "./bin/oxidize.js"
+    "doxide": "./bin/doxide.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nickzuber/oxidize.git"
+    "url": "git+https://github.com/nickzuber/doxide.git"
   },
   "author": "Nick Zuber <zuber.nicholas@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nickzuber/oxidize/issues"
+    "url": "https://github.com/nickzuber/doxide/issues"
   },
   "keywords": [
     "documentation",
@@ -26,14 +26,11 @@
     "md",
     "compile"
   ],
-  "homepage": "https://github.com/nickzuber/oxidize#readme",
+  "homepage": "https://github.com/nickzuber/doxide#readme",
   "dependencies": {
     "chalk": "^1.1.1",
     "minimist": "^1.2.0",
     "node-needle": "^0.1.6"
   },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2"
-  }
+  "devDependencies": {}
 }

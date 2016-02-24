@@ -30,7 +30,6 @@ function continueProcess(){
     process.exit(1);
   }
   argv._.map(function(path){
-
     // this returns tokenizes all directories and the file if given
     // this regex accepts all extensions on files, since we want to
     // handle the file validity somewhere else.
@@ -85,7 +84,6 @@ function continueProcess(){
       }
     }
   });
-
 }
 
 function resolveFlag(flag){
