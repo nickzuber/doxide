@@ -42,11 +42,9 @@ function continueProcess(){
     while(lex = tokenize.exec(path)){
       pathTokens.push(lex[1]||lex[3]);
     }
-
     pathTokens.map(function(tok){
       console.log('token resolved: '+chalk.yellow(tok));
     });
-
     var isDirectory = false;
     try{
       isDirectory = !!fs.lstatSync(path).isDirectory();
@@ -58,7 +56,6 @@ function continueProcess(){
       }
       process.exit(1);
     }
-
     if(isDirectory){
       console.log('searching directory: '+chalk.yellow(path));
       var files = fs.readdirSync(path), slashIfNeeded, actualPath;
@@ -70,7 +67,6 @@ function continueProcess(){
         }
       });
     }
-
     var isFile = false;
     try{
       isFile = !!fs.lstatSync(path).isFile();
@@ -78,7 +74,6 @@ function continueProcess(){
       reportError('Given path does not resolve to a file or was unable to be located: \n'+err);
       process.exit(1);
     }
-
     if(isFile){
       if(validFilePath(pathTokens)){
         console.log('found file: '+chalk.bold.yellow(path));
