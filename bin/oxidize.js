@@ -132,13 +132,3 @@ function validFilePath(file){
 function reportError(err){
   console.log(chalk.bold.red(err));
 }
-
-
-
-
-
-
-
-
-
-//console.log(chalk.bold.green('Markdown successfully compiled'));
