@@ -1,12 +1,10 @@
 {
   "name": "oxidize",
   "version": "1.0.0",
-  "description": "A tool for compiling documentation to markdown.",
+  "description": "A compiler for converting documentation in JavaScript files to markdown.",
   "main": "./bin/oxidize.js",
   "scripts": {
-    "build": "gulp build",
-    "lint": "eslint src/*.js",
-    "ci": "node --harmony unit/*.js"
+    "lint": "eslint ./bin/*.js"
   },
   "bin": {
     "oxidize": "./bin/oxidize.js"
@@ -31,7 +29,8 @@
   "homepage": "https://github.com/nickzuber/oxidize#readme",
   "dependencies": {
     "chalk": "^1.1.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "node-needle": "^0.1.6"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
