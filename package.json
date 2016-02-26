@@ -1,6 +1,6 @@
 {
   "name": "doxide",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A compiler for converting documentation in JavaScript files to markdown.",
   "main": "./bin/doxide.js",
   "scripts": {
