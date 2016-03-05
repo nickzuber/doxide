@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./examples/noResults/logo.png" width="300px" />
-  <a href="https://badge.fury.io/gh/doxide%2Fdoxide"><img src="https://badge.fury.io/gh/doxide%2Fdoxide.svg" alt="GitHub version" height="18"></a>
+  <img src="./examples/noResults/logo_transparent.png" width="400px" /><br />
+  <a href="https://badge.fury.io/gh/doxide%2Fdoxide"><img src="https://badge.fury.io/gh/doxide%2Fdoxide.svg" alt="GitHub version" height="18"></a><br />
+  <p align="center">A compiler for converting documentation in JavaScript files to markdown.</p>
 </p>
-A compiler for converting documentation in JavaScript files to markdown.
 
 ## Installation 
 
