@@ -11,6 +11,15 @@ process.env.INIT_CWD = process.cwd();
 
 // All files to process
 var allFiles = [];
+var currentTimeReference = new Date();
+var timeStamp = '['+chalk.dim.cyan(('0'+currentTimeReference.getHours()).slice(-2)+':'+('0'+currentTimeReference.getMinutes()).slice(-2)+':'+('0'+currentTimeReference.getSeconds()).slice(-2))+'] ';
+
+// List of directories we will never want to search that possibly can
+//  be harmful to this program if they're attempted to be searched.
+var blackListedDirectories = [
+  '.git',
+  'node_modules'
+];
 
 // Check argv for flags
 if(Object.getOwnPropertyNames(argv).length > 1){
@@ -24,7 +33,7 @@ if(Object.getOwnPropertyNames(argv).length > 1){
 
 // Begin to parse and tokenize command line arguments
 function continueProcess(){
-  console.log('\nAttempting to fetch file(s)...');
+  console.log('\n'+timeStamp+'Attempting to fetch file(s)...');
   if(!argv._.length){
     reportError('Expecting files to compile but received none.');
     console.log('For help use the --h or --help command.');
@@ -43,7 +52,7 @@ function continueProcess(){
       pathTokens.push(lex[1]||lex[3]);
     }
     pathTokens.map(function(tok){
-      console.log('token resolved: '+chalk.yellow(tok));
+      //console.log(timeStamp+'token resolved: '+chalk.yellow(tok));
     });
     var isDirectory = false;
     try{
@@ -78,22 +87,26 @@ function continueProcess(){
     }
   });
   // array of task files to parse
-  console.log(allFiles);
+  console.log(timeStamp+'Resolved '+chalk.dim.cyan(allFiles.length)+' file(s)...');
   // extract contents, give it to lexer
 }
 
 function recurseAllFilesInDirectory(path, allFiles){
   var slashIfNeeded, actualPath;
   fs.readdirSync(path).map(function(derivedFile){
-    if(validFilePath(derivedFile)){
-      slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
-      actualPath = path + slashIfNeeded + derivedFile;
-      allFiles.push(actualPath);
-    }else{
-      slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
-      actualPath = path + slashIfNeeded + derivedFile;
-      if(fs.lstatSync(actualPath).isDirectory()){
-        recurseAllFilesInDirectory(actualPath, allFiles);
+    // Ignore black listed directories
+    // poisonious areas which can halt the script from running
+    if(blackListedDirectories.indexOf(derivedFile) === -1){
+      if(validFilePath(derivedFile)){
+        slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
+        actualPath = path + slashIfNeeded + derivedFile;
+        allFiles.push(actualPath);
+      }else{
+        slashIfNeeded = path[path.length-1] === '/' ? '' : '/';
+        actualPath = path + slashIfNeeded + derivedFile;
+        if(fs.lstatSync(actualPath).isDirectory()){
+          recurseAllFilesInDirectory(actualPath, allFiles);
+        }
       }
     }
   });

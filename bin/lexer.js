@@ -4,3 +4,5 @@
  *
  * Pass this tree to the parser.
  */
+
+const tree = require('node-needle').KaryTree;
