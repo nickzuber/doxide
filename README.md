@@ -1,6 +1,7 @@
-# [doxide](https://github.com/nickzuber/oxidize)
-[![GitHub version](https://badge.fury.io/gh/nickzuber%2Fdoxide.svg)](https://badge.fury.io/gh/nickzuber%2Fdoxide)
-
+<p align="center">
+  <img src="./examples/noResults/logo.png" width="300px" />
+  <a href="https://badge.fury.io/gh/doxide%2Fdoxide"><img src="https://badge.fury.io/gh/doxide%2Fdoxide.svg" alt="GitHub version" height="18"></a>
+</p>
 A compiler for converting documentation in JavaScript files to markdown.
 
 ## Installation 
