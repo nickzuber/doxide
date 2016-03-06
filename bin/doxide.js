@@ -33,6 +33,10 @@ if(Object.getOwnPropertyNames(argv).length > 1){
 
 // Begin to parse and tokenize command line arguments
 function continueProcess(){
+  if(!argv._.length){
+    resolveFlag('h');
+    process.exit(0);
+  }
   console.log('\n'+timeStamp+'Attempting to fetch file(s)...');
   if(!argv._.length){
     reportError('Expecting files to compile but received none.');
@@ -51,9 +55,11 @@ function continueProcess(){
     while(lex = tokenize.exec(path)){
       pathTokens.push(lex[1]||lex[3]);
     }
-    pathTokens.map(function(tok){
-      //console.log(timeStamp+'token resolved: '+chalk.yellow(tok));
-    });
+    // @TEST
+    // just prints all resolved tokens
+    // pathTokens.map(function(tok){
+    //   console.log(timeStamp+'token resolved: '+chalk.yellow(tok));
+    // });
     var isDirectory = false;
     try{
       isDirectory = !!fs.lstatSync(path).isDirectory();
@@ -108,6 +114,8 @@ function recurseAllFilesInDirectory(path, allFiles){
           recurseAllFilesInDirectory(actualPath, allFiles);
         }
       }
+    }else{
+      console.log(timeStamp+'Ignoring '+chalk.dim.yellow(derivedFile)+' directory');
     }
   });
 }
