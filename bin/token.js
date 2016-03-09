@@ -3,6 +3,8 @@
  * data as.
  */
 
+'use strict';
+
 /** @constructor
  * Creates an instance of a simple token.
  */

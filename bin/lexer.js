@@ -7,6 +7,8 @@
  * Pass this list to the parser.
  */
 
+'use strict';
+
 const Needle = require('node-needle');
 const Token = require('./token');
 

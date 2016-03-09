@@ -4,3 +4,5 @@
  * 
  * Pass this container to the compiler.
  */
+ 
+'use strict';

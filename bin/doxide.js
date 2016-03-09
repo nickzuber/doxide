@@ -38,11 +38,6 @@ function continueProcess(){
     process.exit(0);
   }
   console.log('\n'+timeStamp+'Attempting to fetch file(s)...');
-  if(!argv._.length){
-    reportError('Expecting files to compile but received none.');
-    console.log('For help use the --h or --help command.');
-    process.exit(1);
-  }
   argv._.map(function(path){
     // this returns tokenizes all directories and the file if given
     // this regex accepts all extensions on files, since we want to
@@ -92,9 +87,15 @@ function continueProcess(){
       }
     }
   });
-  // array of task files to parse
-  console.log(timeStamp+'Resolved '+chalk.dim.cyan(allFiles.length)+' file(s)...');
-  // extract contents, give it to lexer
+  console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file(s)...');
+  allFiles.map(function(taskFile){
+    fs.readFile(taskFile, 'utf8', function(err, data){
+      if(err){
+        reportError("Error occured when attempting to read file: "+);
+      }
+      console.log("Data: "+data);
+    });
+  });
 }
 
 function recurseAllFilesInDirectory(path, allFiles){
