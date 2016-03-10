@@ -14,12 +14,8 @@ const Token = require('./token');
 
 const COMMENT_START = '/**';
 const COMMENT_END = '*/';
-const DATA_TYPES = [
-  'var ',
-  'function ',
-  'const ',
-  'let '
-];
+const DATA_TYPES = /(^(function|var|const|let)| (function|var|const|let)) (\w+)/gmi;
+const PROTO_TYPE = /(\w+)\.prototype.(\w+)(?:(?:\s*=\s*)(function))?/gmi;
 
 /** @private @description
  * Finds the lowest value of an array.
@@ -58,51 +54,54 @@ Lexer.prototype.generateTokens = function(){
 
   do{
     // Collect the indexes of all the things we're looking for
-    var nextItems = [],
-        nextType = [],
+    var tokenContents = [],
+        tokenIndexes = [],
         indexOfClosestToken,
         distanceToSlice;
 
     // Look for any data types
-    DATA_TYPES.map(function(type){
-      if(lclData.indexOf(type) > -1){
-        nextType.push(lclData.indexOf(type));
-        nextItems.push(new Token('dataType', type));
-      }
-    });
+    if(lclData.search(DATA_TYPES) > -1){
+      tokenIndexes.push(lclData.search(DATA_TYPES));
+      tokenContents.push(new Token('dataType', lclData.match(DATA_TYPES)[0]));
+    }
+
+    // Look for any prototype definitions/declarations
+    if(lclData.search(PROTO_TYPE) > -1){
+      tokenIndexes.push(lclData.search(PROTO_TYPE));
+      tokenContents.push(new Token('proto', lclData.match(PROTO_TYPE)[0]));
+    }
 
     // Look for any comment starts
     if(lclData.indexOf(COMMENT_START) > -1){
       if(lclData.indexOf(COMMENT_END) === -1){
         throw new Error('Error while lexing file:\nComment started but never ended in '+this.file);
       }
-      nextType.push(lclData.indexOf(COMMENT_START));
-      nextItems.push(new Token('comment', lclData.substring(lclData.indexOf(COMMENT_START), lclData.indexOf(COMMENT_END)+2)));
+      tokenIndexes.push(lclData.indexOf(COMMENT_START));
+      tokenContents.push(new Token('comment', lclData.substring(lclData.indexOf(COMMENT_START), lclData.indexOf(COMMENT_END)+2)));
     }
 
     // Slice file and tokenize partition
-    indexOfClosestToken = min(nextType);
+    indexOfClosestToken = min(tokenIndexes);
     if(indexOfClosestToken === null){
       break;
     }
 
-    distanceToSlice = nextType[indexOfClosestToken] + nextItems[indexOfClosestToken].content.length;
+    distanceToSlice = tokenIndexes[indexOfClosestToken] + tokenContents[indexOfClosestToken].content.length;
 
     if(++errorHandler >= 10000){
       throw new Error('Infinate loop detected in lexer while reading file '+this.file);
     };
 
-    this.tokenList.insertBack(nextItems[indexOfClosestToken]);
+    this.tokenList.insertBack(tokenContents[indexOfClosestToken]);
     lclData = lclData.slice(distanceToSlice);
 
-  }while(min(nextItems) !== null);
+  }while(min(tokenContents) !== null);
 
   var node = this.tokenList.head;
   while(node !== null){
     console.log(node.data);
     node = node.next;
   }
-
 }
 
 module.exports = Lexer;

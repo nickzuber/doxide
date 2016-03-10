@@ -98,7 +98,11 @@ function continueProcess(){
         reportError("Error occured when attempting to read file: "+taskFile+'\n\n'+err.message);
       }
       var tokenizer = new Lexer(taskFile, data);
-      tokenizer.generateTokens();
+      try{
+        tokenizer.generateTokens();
+      }catch(e){
+        reportError(e);
+      }
     });
   });
 }
