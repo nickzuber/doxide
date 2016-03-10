@@ -67,7 +67,7 @@ Lexer.prototype.generateTokens = function(){
     DATA_TYPES.map(function(type){
       if(lclData.indexOf(type) > -1){
         nextType.push(lclData.indexOf(type));
-        nextItems.push({'label': 'dataType', 'content': type});
+        nextItems.push(new Token('dataType', type));
       }
     });
 
@@ -77,7 +77,7 @@ Lexer.prototype.generateTokens = function(){
         throw new Error('Error while lexing file:\nComment started but never ended in '+this.file);
       }
       nextType.push(lclData.indexOf(COMMENT_START));
-      nextItems.push({'label': 'comment', 'content': lclData.substring(lclData.indexOf(COMMENT_START), lclData.indexOf(COMMENT_END)+2)});
+      nextItems.push(new Token('comment', lclData.substring(lclData.indexOf(COMMENT_START), lclData.indexOf(COMMENT_END)+2)));
     }
 
     // Slice file and tokenize partition

@@ -4,7 +4,7 @@
  * @param {string} a string parameter
  * @return {void} 
  */
-function myFunction(param){
+function my_function(param){
   var something = 0;
   something = param + 10;
   return something;

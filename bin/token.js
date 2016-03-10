@@ -9,9 +9,9 @@
  * @description
  * Creates an instance of a simple token.
  */
-const Token = function(label, contents){
+const Token = function(label, content){
   this.label = label;
-  this.contents = contents;
+  this.content = content;
 }
 
 module.exports = Token;
