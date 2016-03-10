@@ -11,11 +11,7 @@
 
 const Needle = require('node-needle');
 const Token = require('./token');
-
-const COMMENT_START = '/**';
-const COMMENT_END = '*/';
-const DATA_TYPES = /(^(function|var|const|let)| (function|var|const|let)) (\w+)/gmi;
-const PROTO_TYPE = /(\w+)\.prototype.(\w+)(?:(?:\s*=\s*)(function))?/gmi;
+const _ = require('./constants');
 
 /** @private @description
  * Finds the lowest value of an array.
@@ -48,6 +44,9 @@ const Lexer = function(fileName, data){
   this.tokenList = new Needle.SinglyLinkedList();
 }
 
+
+/** @description
+ */
 Lexer.prototype.generateTokens = function(){
   var lclData = this.data;
   var errorHandler = 0;
@@ -60,24 +59,24 @@ Lexer.prototype.generateTokens = function(){
         distanceToSlice;
 
     // Look for any data types
-    if(lclData.search(DATA_TYPES) > -1){
-      tokenIndexes.push(lclData.search(DATA_TYPES));
-      tokenContents.push(new Token('dataType', lclData.match(DATA_TYPES)[0]));
+    if(lclData.search(_.DATA_TYPES) > -1){
+      tokenIndexes.push(lclData.search(_.DATA_TYPES));
+      tokenContents.push(new Token(_.ENUM.DATA_TYPE, lclData.match(_.DATA_TYPES)[0]));
     }
 
     // Look for any prototype definitions/declarations
-    if(lclData.search(PROTO_TYPE) > -1){
-      tokenIndexes.push(lclData.search(PROTO_TYPE));
-      tokenContents.push(new Token('proto', lclData.match(PROTO_TYPE)[0]));
+    if(lclData.search(_.PROTO_TYPE) > -1){
+      tokenIndexes.push(lclData.search(_.PROTO_TYPE));
+      tokenContents.push(new Token(_.ENUM.PROTO, lclData.match(_.PROTO_TYPE)[0]));
     }
 
-    // Look for any comment starts
-    if(lclData.indexOf(COMMENT_START) > -1){
-      if(lclData.indexOf(COMMENT_END) === -1){
+    // Look for any comments
+    if(lclData.indexOf(_.COMMENT_START) > -1){
+      if(lclData.indexOf(_.COMMENT_END) === -1){
         throw new Error('Error while lexing file:\nComment started but never ended in '+this.file);
       }
-      tokenIndexes.push(lclData.indexOf(COMMENT_START));
-      tokenContents.push(new Token('comment', lclData.substring(lclData.indexOf(COMMENT_START), lclData.indexOf(COMMENT_END)+2)));
+      tokenIndexes.push(lclData.indexOf(_.COMMENT_START));
+      tokenContents.push(new Token(_.ENUM.COMMENT, lclData.substring(lclData.indexOf(_.COMMENT_START), lclData.indexOf(_.COMMENT_END)+2)));
     }
 
     // Slice file and tokenize partition
@@ -96,6 +95,10 @@ Lexer.prototype.generateTokens = function(){
     lclData = lclData.slice(distanceToSlice);
 
   }while(min(tokenContents) !== null);
+
+
+  //@TEST
+  return;
 
   var node = this.tokenList.head;
   while(node !== null){

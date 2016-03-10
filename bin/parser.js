@@ -8,30 +8,51 @@
 'use strict';
 
 const Needle = require('node-needle');
-const tagFormat = /(@[\w]+)([A-Za-z1-9.,!#$%^&*(){}\[\]\'\";:<>\/? ]*)/gmi;
+const Token = require('./token');
+const _ = require('./constants');
 
+
+/**
+ */
 const Parser = function(tokenList){
   this.tokenList = tokenList;
   this.tokenTree = new Needle.KaryTree();
 }
 
-Parser.prototype.generateTree = function(){
-  var tokens = [];
-  // This PROBABLY WON'T work - check it see if it deletes actual list as well
-  var tokenListCpy = this.tokenList;
-  while(tokenListCpy.size()){
-    var data = tokenListCpy.head.contents;
-    var locateToken;
-    do{
-      matches = tagFormat.exec(data);
-      if(matches){
-        var tok = [];
-        tok.label = matches[1];
-        tok.contents = matches[2];
-        tokens.push(tok);
-      }
-    }while(matches);
-    tokenListCpy.removeHead();
+
+/**
+ */
+Parser.prototype.generateTokenTree = function(){
+  var node = this.tokenList.head,
+      token;
+  while(node !== null){
+    switch(node.data.label){
+      case _.ENUM.COMMENT:
+        this.parseCommentToken(node);
+        break;
+      case _.ENUM.DATA_TYPE:
+      case _.ENUM.PROTO:
+      default:
+    }
+    node = node.next;
   }
-  console.log(tokens);
 }
+
+
+/**
+ */
+Parser.prototype.parseCommentToken = function(token){
+  var tokens = [];
+  var data = token.data.content;
+  var tokenizer;
+  do{
+    tokenizer = _.TAGFORMAT.exec(data);
+    if(tokenizer){
+      tokens.push(new Token(tokenizer[1], tokenizer[2]));
+    }
+  }while(tokenizer);
+  console.log(tokens);
+  // TODO: clean the content 
+}
+
+module.exports = Parser;

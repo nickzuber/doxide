@@ -103,6 +103,8 @@ function continueProcess(){
       }catch(e){
         reportError(e);
       }
+      var parser = new Parser(tokenizer.tokenList);
+      parser.generateTokenTree();
     });
   });
 }
