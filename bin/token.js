@@ -6,6 +6,7 @@
 'use strict';
 
 /** @constructor
+ * @description
  * Creates an instance of a simple token.
  */
 const Token = function(label, contents){

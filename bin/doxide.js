@@ -3,6 +3,9 @@
 'use strict';
 
 const chalk = require('chalk');
+const Lexer = require('./lexer');
+const Parser = require('./parser');
+const Compiler = require('./compiler');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 
@@ -87,13 +90,15 @@ function continueProcess(){
       }
     }
   });
+  // Task files resolved - let's start lexing and parsing
   console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file(s)...');
   allFiles.map(function(taskFile){
     fs.readFile(taskFile, 'utf8', function(err, data){
       if(err){
-        reportError("Error occured when attempting to read file: "+);
+        reportError("Error occured when attempting to read file: "+taskFile+'\n\n'+err.message);
       }
-      console.log("Data: "+data);
+      var tokenizer = new Lexer(taskFile, data);
+      tokenizer.generateTokens();
     });
   });
 }
