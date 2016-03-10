@@ -87,7 +87,7 @@ Lexer.prototype.generateTokens = function(){
 
     distanceToSlice = tokenIndexes[indexOfClosestToken] + tokenContents[indexOfClosestToken].content.length;
 
-    if(++errorHandler >= 10000){
+    if(++errorHandler >= 65536){
       throw new Error('Infinate loop detected in lexer while reading file '+this.file);
     };
 

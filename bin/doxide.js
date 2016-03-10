@@ -40,7 +40,7 @@ function continueProcess(){
     resolveFlag('h');
     process.exit(0);
   }
-  console.log('\n'+timeStamp+'Attempting to fetch file(s)...');
+  console.log('\n'+timeStamp+'Attempting to fetch files');
   argv._.map(function(path){
     // this returns tokenizes all directories and the file if given
     // this regex accepts all extensions on files, since we want to
@@ -91,7 +91,7 @@ function continueProcess(){
     }
   });
   // Task files resolved - let's start lexing and parsing
-  console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file(s)...');
+  console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
   allFiles.map(function(taskFile){
     fs.readFile(taskFile, 'utf8', function(err, data){
       if(err){
