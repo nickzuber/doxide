@@ -52,7 +52,7 @@ Parser.prototype.parseCommentToken = function(token){
     }
   }while(tokenizer);
   console.log(tokens);
-  // TODO: clean the content 
+  // TODO: clean the content
 }
 
 module.exports = Parser;

@@ -133,17 +133,17 @@ function recurseAllFilesInDirectory(path, allFiles){
 }
 
 function resolveFlag(flag){
-  console.log(chalk.bold.white('\nUsage: oxidize <command>\n'));
+  console.log(chalk.bold.white('\nUsage: doxide <command>\n'));
   console.log(chalk.bold.white('  Possible <commands> could be:\n'));
   switch(flag){
     case 'h':
     case 'help':
-      console.log(chalk.bold.white('  oxidize --h                         Prompts the help screen'));
-      console.log(chalk.bold.white('  oxidize --help                      Prompts the help screen'));
-      console.log(chalk.bold.white('  oxidize <file>                      Compiles <file>'));
-      console.log(chalk.bold.white('  oxidize <directory>                 Compiles all valid files in <directory>'));
-      console.log(chalk.bold.white('  oxidize <file1> -o <file2>          Compiles <file1> and stores output in <file2>'));
-      console.log(chalk.bold.white('  oxidize <directory> -o <file>       Compiles all valid files in <directory> and stores output in <file>'));
+      console.log(chalk.bold.white('  doxide --h                         Prompts the help screen'));
+      console.log(chalk.bold.white('  doxide --help                      Prompts the help screen'));
+      console.log(chalk.bold.white('  doxide <file>                      Compiles <file>'));
+      console.log(chalk.bold.white('  doxide <directory>                 Compiles all valid files in <directory>'));
+      console.log(chalk.bold.white('  doxide <file1> -o <file2>          Compiles <file1> and stores output in <file2>'));
+      console.log(chalk.bold.white('  doxide <directory> -o <file>       Compiles all valid files in <directory> and stores output in <file>'));
       break;
     default:
       console.log(chalk.bold.white('Unrecognized command: ') + chalk.bold.red(flag));
