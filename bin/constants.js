@@ -14,6 +14,6 @@ module.exports = {
 
   STARTING            : 0,
   LOOKING_FOR_COMMENT : 1,
-  LOOKING_FOR_TYPE    : 2
+  FOUND_A_COMMENT     : 2
 
 }

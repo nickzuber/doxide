@@ -29,17 +29,17 @@ Parser.prototype.generateTokenTree = function(){
   while(node !== null){
     switch(node.data.label){
       case _.ENUM.COMMENT:
-        if(this.state === _.STARTING || this.state === _.LOOKING_FOR_COMMENT || this.state === _.LOOKING_FOR_TYPE){
+        if(this.state === _.STARTING || this.state === _.LOOKING_FOR_COMMENT || this.state === _.FOUND_A_COMMENT){
           this.parseCommentToken(node);
         }
         break;
       case _.ENUM.DATA_TYPE:
-        if(this.state === _.LOOKING_FOR_TYPE){
+        if(this.state === _.FOUND_A_COMMENT){
           this.parseDataTypeToken(node);
         }
         break;
       case _.ENUM.PROTO:
-        if(this.state === _.LOOKING_FOR_TYPE){
+        if(this.state === _.FOUND_A_COMMENT){
           this.parseProtoTypeToken(node);
         }
         break;
@@ -75,7 +75,7 @@ Parser.prototype.parseCommentToken = function(token){
   }.bind(this));
 
 
-  this.state = _.LOOKING_FOR_TYPE;
+  this.state = _.FOUND_A_COMMENT;
   //console.log(tokens);
 }
 
