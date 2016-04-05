@@ -1,5 +1,9 @@
-/**
+/** @description
  * The description of some function c.
  * @param {void}
- * @return {function} a function return type
+ * @return a function return type
  */
+function myFunction(){
+  var myCar = false;
+  return myCar;
+}

@@ -4,7 +4,7 @@
  * @param {string} a string parameter
  * @return {void} 
  */
-function my_function(param){
+function normalFunction(param){
   var something = 0;
   something = param + 10;
   return something;
@@ -15,7 +15,7 @@ function my_function(param){
  * @param {number} a number parameter
  * @return {void} 
  */
-Obj.prototype.property = function(param){
+Obj.prototype.protoFunction = function(param){
   var something = 0;
   something = param + 10;
   return something;
