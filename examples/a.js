@@ -1,10 +1,10 @@
 /** @description
  * The description of some function a.
- * @param {number} a number parameter
- * @param {string} a string parameter
+ * @param {number} [param1] a number parameter
+ * @param {string} [param2] a string parameter
  * @return {void} 
  */
-function normalFunction(param){
+function normalFunction(param1, param2){
   var something = 0;
   something = param + 10;
   return something;

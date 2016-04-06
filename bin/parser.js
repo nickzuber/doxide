@@ -71,9 +71,43 @@ Parser.prototype.parseCommentToken = function(token){
     tokens[index].content = tok.content.split('*/').join('');
     tokens[index].content = tok.content.split('*').join('');
     tokens[index].content = tok.content.replace(/ +(?= )/g,'').trim();
+    // If types are defined, we want to split this up
+    do{
+      tokenizer = _.EXTRACT_TYPE.exec(tok.content);
+      if(tokenizer){
+        if(typeof tok.type === 'undefined'){
+          tok.type = [];
+        }
+        tok.type.push(tokenizer[1]);
+      }
+    }while(tokenizer);
+    // If names are defined, we want to split this up
+    do{
+      tokenizer = _.EXTRACT_NAME.exec(tok.content);
+      if(tokenizer){
+        if(typeof tok.name === 'undefined'){
+          tok.name = [];
+        }
+        tok.name.push(tokenizer[1].split(' ')[0]);
+      }
+    }while(tokenizer);
+    // If descriptions are defined, we want to split this up
+    do{
+      tokenizer = _.EXTRACT_DESC.exec(tok.content);
+      if(tokenizer){
+        if(typeof tok.description === 'undefined'){
+          tok.description = [];
+        }
+        tok.description.push(tokenizer[3].trim());
+      }
+    }while(tokenizer);
+
+    console.log(' ');
+    console.log(tok);
+    console.log(' ');
+
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
-
 
   this.state = _.FOUND_A_COMMENT;
   //console.log(tokens);

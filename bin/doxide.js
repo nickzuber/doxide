@@ -176,13 +176,8 @@ function continueWorking(){
       }
       var parser = new Parser(tokenizer.tokenList);
       parser.generateTokenTree();
-      console.log('TOKEN TREE HAS ' + parser.tokenTree.root.children.length + ' CHILDREN');
-      parser.tokenTree.root.children.map(function(node){
-        node.children.map(function(innerNode){
-          console.log(innerNode.data.label + ': ' + innerNode.data.content);
-        });
-        console.log('');
-      });
+      var markdownGenerator = new Compiler(parser.tokenTree);
+      markdownGenerator.compile();
     });
   });
 }

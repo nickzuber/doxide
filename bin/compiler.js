@@ -5,3 +5,11 @@
  */
 
 'use strict';
+
+const _ = require('./constants');
+
+/**
+*/
+const Compiler = function(){
+  //
+}

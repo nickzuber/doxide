@@ -11,6 +11,9 @@ module.exports = {
   DATA_TYPES          : /(^(function|var|const|let)| (function|var|const|let)) (\w+)/gmi,
   PROTO_TYPE          : /(\w+)\.prototype.(\w+)(?:(?:\s*=\s*)(function))?/gmi,
   TAGFORMAT           : /(@[\w]+)([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)/gmi,
+  EXTRACT_TYPE        : /(?:{(\w+)})/gi,
+  EXTRACT_NAME        : /(?:\[([\w| =]+)\])/gi,
+  EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])\s*([\w ]+)/gi,
 
   STARTING            : 0,
   LOOKING_FOR_COMMENT : 1,
