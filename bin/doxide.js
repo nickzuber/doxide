@@ -10,7 +10,7 @@ const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 
 // TODO: Search current directory for .doxyfile - if not found, start at root and search everything
-//       Do this when compiler is ready
+//       Do this when compiler is ready 
 
 // Set env to original cwd
 process.env.INIT_CWD = process.cwd();
