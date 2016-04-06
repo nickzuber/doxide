@@ -1,0 +1,32 @@
+
+{{label}}         -> label.content -> the content of the label
+{{label.type}}    -> if a type was defined (denoted by "{type}"), this will be returned. Otherwise, Undefined
+{{label.content}} -> the content of the label
+{{label.name}}    -> if a name was defined (denoted by "[name]"), this will be returned. Otherwise, Undefined.
+
+
+
+#ifndef {{private}}
+
+  #ifdef {{header}}
+
+  ### <a href="#" name="">Needle.{{header}}()</a>
+  **{{property.name}}** - *{{property.type}}* - {{property.content}}.<br />
+  
+  #endif
+
+
+
+  #ifdef {{constructor}}
+  //
+  #endif
+
+
+
+  #ifndef {{constructor}} && {{header}}
+
+   - **{{function}}**([< {{param.type}} >param.body]) - *{{return}}* - Creates a Singly Linked List and inserts a node at the head of the newly created list if `data` is given.
+
+  #endif
+
+#endif

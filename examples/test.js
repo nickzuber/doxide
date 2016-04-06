@@ -1,6 +1,6 @@
 /** @header
- * K-ary Tree
- * @property {root} Node, the root of the tree
+ * KaryTree
+ * @property {Node} [root], the root of the tree
  * 
  * Asymptotic time complexities
  * +---------------------------+
