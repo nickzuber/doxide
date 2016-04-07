@@ -40,7 +40,7 @@ function min(arr){
  */
 const Lexer = function(fileName, data){
   this.file = fileName;
-  this.data = data.replace(/(\r\n|\n|\r)/gm,'');
+  this.data = data.replace(/(\r\n|\n|\r)/gm, '');
   this.tokenList = new Needle.SinglyLinkedList();
 }
 
@@ -98,13 +98,11 @@ Lexer.prototype.generateTokens = function(){
 
 
   //@TEST
-  return;
-
-  var node = this.tokenList.head;
-  while(node !== null){
-    console.log(node.data);
-    node = node.next;
-  }
+  // var node = this.tokenList.head;
+  // while(node !== null){
+  //   console.log(node.data);
+  //   node = node.next;
+  // }
 }
 
 module.exports = Lexer;

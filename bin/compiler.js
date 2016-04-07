@@ -10,6 +10,22 @@ const _ = require('./constants');
 
 /**
 */
-const Compiler = function(){
-  //
+const Compiler = function(nodeTree){
+  this.nodeTree = nodeTree;
 }
+
+/**
+*/
+Compiler.prototype.compile = function(){
+  var nodeTree = this.nodeTree;
+  console.log('TOKEN TREE HAS ' + nodeTree.root.children.length + ' CHILDREN');
+    nodeTree.root.children.map(function(node){
+      node.children.map(function(innerNode){
+        console.log(innerNode.data.label + ': content:');
+        console.log(innerNode.data);
+      });
+      console.log('');
+    });
+};
+
+module.exports = Compiler;

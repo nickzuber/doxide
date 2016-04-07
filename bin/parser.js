@@ -70,7 +70,7 @@ Parser.prototype.parseCommentToken = function(token){
     tokens[index].content = tok.content.split('/**').join('');
     tokens[index].content = tok.content.split('*/').join('');
     tokens[index].content = tok.content.split('*').join('');
-    tokens[index].content = tok.content.replace(/ +(?= )/g,'').trim();
+    tokens[index].content = tok.content.replace(/ +(?= )/g, '').trim();
     // If types are defined, we want to split this up
     do{
       tokenizer = _.EXTRACT_TYPE.exec(tok.content);

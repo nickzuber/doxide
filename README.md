@@ -4,7 +4,7 @@
   <a href="https://david-dm.org/doxide/doxide" title="Dependency status"><img src="https://david-dm.org/doxide/doxide.svg"/></a>
   <a href="https://david-dm.org/doxide/doxide#info=devDependencies" title="devDependency"><img src="https://david-dm.org/doxide/doxide/dev-status.svg"/></a>
   <br />
-  <p align="center">A compiler for converting documentation in JavaScript files to markdown.</p>
+  <p align="center">A tool for transforming documentation in JavaScript files to markdown.</p>
 </p>
 
 ## Installation 
