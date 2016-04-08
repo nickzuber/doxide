@@ -1,6 +1,6 @@
 {
   "targets" : [
-    "./a.js"
+    "./test.js"
   ],
   "output" : "docs"
 }

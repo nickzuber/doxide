@@ -25,7 +25,7 @@
 
   #ifndef {{constructor}} && {{header}}
 
-   - **{{function}}**([< {{param.type}} >param.body]) - *{{return}}* - Creates a Singly Linked List and inserts a node at the head of the newly created list if `data` is given.
+   - **{{function}}**([< {{type}} >{{name}}]) - *{{return}}* - {{description}}
 
   #endif
 

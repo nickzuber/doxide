@@ -102,15 +102,10 @@ Parser.prototype.parseCommentToken = function(token){
       }
     }while(tokenizer);
 
-    console.log(' ');
-    console.log(tok);
-    console.log(' ');
-
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
 
   this.state = _.FOUND_A_COMMENT;
-  //console.log(tokens);
 }
 
 /**
@@ -130,7 +125,6 @@ Parser.prototype.parseDataTypeToken = function(token){
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
   
-  //console.log(tokens);
   this.state = _.LOOKING_FOR_COMMENT;
 }
 
@@ -151,7 +145,6 @@ Parser.prototype.parseProtoTypeToken = function(token){
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
   
-  //console.log(tokens);
   this.state = _.LOOKING_FOR_COMMENT;
 }
 

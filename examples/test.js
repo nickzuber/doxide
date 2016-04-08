@@ -18,7 +18,7 @@
 
 const Node = require('./multidirectional_tree_node.js');
 
-/** @description
+/** @constructor @description
  * Creates an empty k-ary tree.
  * @param {Node} the root node
  * @return {void}

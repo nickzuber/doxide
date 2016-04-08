@@ -13,10 +13,17 @@ module.exports = {
   TAGFORMAT           : /(@[\w]+)([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)/gmi,
   EXTRACT_TYPE        : /(?:{(\w+)})/gi,
   EXTRACT_NAME        : /(?:\[([\w| =]+)\])/gi,
-  EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])\s*([\w ]+)/gi,
+  EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])(?:,?)\s*([\w ]+)/gi,
 
   STARTING            : 0,
   LOOKING_FOR_COMMENT : 1,
-  FOUND_A_COMMENT     : 2
+  FOUND_A_COMMENT     : 2,
+
+  HEADER              : '### <a href="#{{link}}" name="{{link}}">Needle.{{header}}()</a>\n',
+  PROPERTY            : '**{{name}}** - *{{type}}* - {{description}}.\n',
+  FUNCTION_START      : ' - **{{function}}**(',
+  PARAMS              : '< {{type}} >{{name}}',
+  FUNCTION_END        : ') - *{{return}}* - {{description}}\n'
+
 
 }
