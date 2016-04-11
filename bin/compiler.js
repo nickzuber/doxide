@@ -85,7 +85,7 @@ Compiler.prototype.generateFunction = function(node){
         lclStart = lclStart.split('{{function}}').join(dataRef.content);
       }
     }
-    // PARAMS 
+    // PARAMS
     if(dataRef.label === 'param'){
       if(!paramSoFar.length){
         paramSoFar = lclParam.split('{{type}}').join(dataRef.type);
