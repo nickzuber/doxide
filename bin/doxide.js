@@ -9,7 +9,6 @@ const Compiler = require('./compiler');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 
-// TODO: Search current directory for .doxytemplate - if not found, throw error I guess bc we need a template
 //       Search current directory for doxyfile.json - if not found, shouldn't matter; fall back on command line args
 
 // Set env to original cwd
@@ -99,7 +98,7 @@ function continueProcess(){
         }
       }
     });
-    continueWorking();
+    workOnFileTree();
   }else{
     fs.readFile('./doxyfile.json', 'utf8', function(err, data){
       if(err){
@@ -155,12 +154,12 @@ function continueProcess(){
           }
         });
       }
-      continueWorking();
+      workOnFileTree();
     });
   }
 }
 
-function continueWorking(){
+function workOnFileTree(){
   // Task files resolved - let's start lexing and parsing
   console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
   allFiles.map(function(taskFile){

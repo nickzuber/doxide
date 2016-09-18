@@ -1,6 +1,6 @@
-/** 
+/**
  * Compile the container given by the parser into string? markdown code.
- * 
+ *
  * Write this out to a destination file denoted by -o flag or write to command line.
  */
 
@@ -32,7 +32,6 @@ Compiler.prototype.compile = function(){
     else{
       self.generateFunction(node.children);
     }
-    console.log('');
   });
 };
 
@@ -41,6 +40,8 @@ Compiler.prototype.compile = function(){
 */
 Compiler.prototype.generateHeader = function(node){
   var self = this;
+
+  console.log('GENERATING HEADER');
 
   node.map(function(innerNode){
     var dataRef = innerNode.data;
@@ -71,6 +72,8 @@ Compiler.prototype.generateFunction = function(node){
       lclParam     = _.PARAMS,
       lclEnd       = _.FUNCTION_END;
 
+console.log('GENERATING FUNCTION');
+
   node.map(function(innerNode){
     var dataRef = innerNode.data;
     console.log(dataRef);
@@ -90,6 +93,12 @@ Compiler.prototype.generateFunction = function(node){
       if(!paramSoFar.length){
         paramSoFar = lclParam.split('{{type}}').join(dataRef.type);
         paramSoFar = paramSoFar.split('{{name}}').join(dataRef.name);
+      }
+    }
+    // RETURN
+    if(dataRef.label === 'return'){
+      if(!paramSoFar.length){
+        paramSoFar = lclParam.split('{{return}}').join(dataRef.content);
       }
     }
     // END
