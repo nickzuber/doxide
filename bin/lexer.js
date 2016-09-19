@@ -13,7 +13,7 @@ const Needle = require('node-needle');
 const Token = require('./token');
 const _ = require('./constants');
 
-/** @private @description
+/** @private
  * Finds the lowest value of an array.
  * @param {array} array to search
  * return {number} the index of the lowest element
@@ -33,7 +33,7 @@ function min(arr){
   return minIndex;
 }
 
-/** @constructor @description
+/** @constructor
  * Creates an instance of a lexer to tokenize data.
  * @param {string} raw file contents in string form
  * @return {void}
@@ -44,9 +44,6 @@ const Lexer = function(fileName, data){
   this.tokenList = new Needle.SinglyLinkedList();
 }
 
-
-/** @description
- */
 Lexer.prototype.generateTokens = function(){
   var lclData = this.data;
   var errorHandler = 0;

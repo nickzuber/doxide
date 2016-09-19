@@ -8,15 +8,11 @@
 
 const _ = require('./constants');
 
-/**
-*/
 const Compiler = function(nodeTree){
   this.nodeTree = nodeTree;
   this.output = '';
 }
 
-/**
-*/
 Compiler.prototype.compile = function(){
   var nodeTree = this.nodeTree,
           self = this;
@@ -35,9 +31,6 @@ Compiler.prototype.compile = function(){
   });
 };
 
-
-/**
-*/
 Compiler.prototype.generateHeader = function(node){
   var self = this;
 
@@ -61,9 +54,6 @@ Compiler.prototype.generateHeader = function(node){
   console.log(this.output)
 };
 
-
-/**
-*/
 Compiler.prototype.generateFunction = function(node){
   var self         = this,
       constructor  = false,
@@ -90,25 +80,24 @@ console.log('GENERATING FUNCTION');
     }
     // PARAMS
     if(dataRef.label === 'param'){
-      if(!paramSoFar.length){
-        paramSoFar = lclParam.split('{{type}}').join(dataRef.type);
-        paramSoFar = paramSoFar.split('{{name}}').join(dataRef.name);
+      if (paramSoFar.length) {
+        paramSoFar += ', '
       }
+      paramSoFar += lclParam.split('{{type}}').join(dataRef.type);
+      paramSoFar = paramSoFar.split('{{name}}').join(dataRef.name || 'arg');
     }
     // RETURN
     if(dataRef.label === 'return'){
-      if(!paramSoFar.length){
-        paramSoFar = lclParam.split('{{return}}').join(dataRef.content);
-      }
+      lclEnd = lclEnd.split('{{return}}').join(dataRef.type);
     }
     // END
-    if(dataRef.label === 'description' || dataRef.label === 'return'){
-      lclEnd = lclEnd.split('{{description}}').join(dataRef.description);
+    if(dataRef.label === 'description'){
+      lclEnd = lclEnd.split('{{description}}').join(dataRef.content);
     }
   });
   self.output += lclStart + paramSoFar + lclEnd;
   this.output += '\n';
-  console.log(this.output)
+  console.log(`\nOUTPUT:\n${this.output}`)
 };
 
 

@@ -1,4 +1,4 @@
-/** 
+/**
  * A simple format for the tokens we want to store our
  * data as.
  */

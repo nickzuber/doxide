@@ -11,9 +11,10 @@ module.exports = {
   DATA_TYPES          : /(^(function|var|const|let)| (function|var|const|let)) (\w+)/gmi,
   PROTO_TYPE          : /(\w+)\.prototype.(\w+)(?:(?:\s*=\s*)(function))?/gmi,
   TAGFORMAT           : /(@[\w]+)([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)/gmi,
+  EXTRACT_DESC        : /^([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)(?:@)/gmi,
   EXTRACT_TYPE        : /(?:{(\w+)})/gi,
   EXTRACT_NAME        : /(?:\[([\w| =]+)\])/gi,
-  EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])(?:,?)\s*([\w ]+)/gi,
+//EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])(?:,?)\s*([\w ]+)/gmi,
 
   STARTING            : 0,
   LOOKING_FOR_COMMENT : 1,
@@ -22,8 +23,9 @@ module.exports = {
   HEADER              : '### <a href="#{{link}}" name="{{link}}">Needle.{{header}}()</a>\n',
   PROPERTY            : '**{{name}}** - *{{type}}* - {{description}}.\n',
   FUNCTION_START      : ' - **{{function}}**(',
-  PARAMS              : '< {{type}} >{{name}}',
-  FUNCTION_END        : ') - *{{return}}* - {{description}}\n'
+  PARAMS              : '< _{{type}}_ >{{name}}',
+  FUNCTION_END        : ') - *{{return}}* - {{description}}\n',
 
+  DESCRIPTION         : 'description'
 
 }

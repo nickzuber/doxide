@@ -1,28 +1,23 @@
-/** 
+/**
  * Parses the tree structure into a container that
  * we can use to organize the data we need and will compile.
- * 
+ *
  * Pass this container to the compiler.
  */
- 
+
 'use strict';
 
 const Needle = require('node-needle');
 const Token = require('./token');
 const _ = require('./constants');
 
-
-/**
- */
-const Parser = function(tokenList){
+const Parser = function(taskFile, tokenList){
+  this.taskFile = taskFile;
   this.tokenList = tokenList;
   this.tokenTree = new Needle.KaryTree(null);
   this.state = _.STARTING;
 }
 
-
-/**
- */
 Parser.prototype.generateTokenTree = function(){
   var node = this.tokenList.head,
       token;
@@ -49,21 +44,24 @@ Parser.prototype.generateTokenTree = function(){
   }
 }
 
-
-/**
- */
 Parser.prototype.parseCommentToken = function(token){
   this.tokenTree.root.appendChild('NODE');
   var tokens = [];
   var data = token.data.content;
   var tokenizer;
   var lastChildIndex = this.tokenTree.root.children.length - 1;
+  // Attempt to extract a description
+  var descriptionText = _.EXTRACT_DESC.exec(data)[1] || '';
+  tokens.push(new Token(_.DESCRIPTION, descriptionText));
+
+  // Parse into tokens with tags
   do{
     tokenizer = _.TAGFORMAT.exec(data);
     if(tokenizer){
       tokens.push(new Token(tokenizer[1], tokenizer[2]));
     }
   }while(tokenizer);
+
   // Clean the content
   tokens.map(function(tok, index){
     tokens[index].label = tok.label.split('@').join('');
@@ -72,9 +70,14 @@ Parser.prototype.parseCommentToken = function(token){
     tokens[index].content = tok.content.split('*').join('');
     tokens[index].content = tok.content.replace(/ +(?= )/g, '').trim();
     // If types are defined, we want to split this up
+    if (!_.EXTRACT_TYPE.exec(tok.content) && tok.label !== _.DESCRIPTION) {
+      console.log('\ntoken');
+      console.log(tok.label);
+      console.log('\n');
+    }
     do{
       tokenizer = _.EXTRACT_TYPE.exec(tok.content);
-      if(tokenizer){
+      if(tokenizer) {
         if(typeof tok.type === 'undefined'){
           tok.type = [];
         }
@@ -92,24 +95,21 @@ Parser.prototype.parseCommentToken = function(token){
       }
     }while(tokenizer);
     // If descriptions are defined, we want to split this up
-    do{
-      tokenizer = _.EXTRACT_DESC.exec(tok.content);
-      if(tokenizer){
-        if(typeof tok.description === 'undefined'){
-          tok.description = [];
-        }
-        tok.description.push(tokenizer[3].trim());
-      }
-    }while(tokenizer);
-
+    // do{
+    //   tokenizer = _.EXTRACT_DESC.exec(tok.content);
+    //   if(tokenizer){
+    //     if(typeof tok.description === 'undefined'){
+    //       tok.description = [];
+    //     }
+    //     tok.description.push(tokenizer[3].trim());
+    //   }
+    // }while(tokenizer);
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
 
   this.state = _.FOUND_A_COMMENT;
 }
 
-/**
- */
 Parser.prototype.parseDataTypeToken = function(token){
   var tokens = [];
   var data = token.data.content;
@@ -124,12 +124,10 @@ Parser.prototype.parseDataTypeToken = function(token){
   tokens.map(function(tok){
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
-  
+
   this.state = _.LOOKING_FOR_COMMENT;
 }
 
-/**
- */
 Parser.prototype.parseProtoTypeToken = function(token){
   var tokens = [];
   var data = token.data.content;
@@ -144,7 +142,7 @@ Parser.prototype.parseProtoTypeToken = function(token){
   tokens.map(function(tok){
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
-  
+
   this.state = _.LOOKING_FOR_COMMENT;
 }
 

@@ -173,8 +173,9 @@ function workOnFileTree(){
       }catch(e){
         reportError(e);
       }
-      var parser = new Parser(tokenizer.tokenList);
+      var parser = new Parser(taskFile, tokenizer.tokenList);
       parser.generateTokenTree();
+//console.log(JSON.stringify(parser.tokenTree, null, 4));
       var markdownGenerator = new Compiler(parser.tokenTree);
       markdownGenerator.compile();
     });

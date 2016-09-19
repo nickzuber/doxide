@@ -1,9 +1,10 @@
-/** @description
+/**
  * The description of some function c.
- * @param {void}
- * @return a function return type
+ * @param {string} arg The argument for this function.
+ * @param count The count.
+ * @return {boolean} A description about what this funtion returns.
  */
-function myFunction(){
-  var myCar = false;
+function isEmpty(arg, count){
+  var myCar = arg ? false : true;
   return myCar;
 }
