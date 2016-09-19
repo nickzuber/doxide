@@ -1,99 +1,84 @@
 /** @header
- * KaryTree
- * @property {Node} [root], the root of the tree
- * 
+ * Queue
+ * @property {Node} front the first element in the queue
+ * @property {Node} back the last element in the queue
+ * @property {number} size the number of nodes in the queue
+ *
  * Asymptotic time complexities
- * +---------------------------+
- * | isLeaf           | O(1)   |
- * | emptySubtree     | O(n)   |
- * | emptyTree        | O(n)   |
- * | search           | O(n)   |
- * +---------------------------+
- * 
- * TODO: let user set a custom `equal` function
- * 
+ * +-------------------+
+ * | enqueue  |  O(1)  |
+ * | dequeue  |  O(1)  |
+ * +-------------------+
+ *
  */
 
-'use strict';
+const Node = require('./unidirectional_node.js');
 
-const Node = require('./multidirectional_tree_node.js');
-
-/** @constructor @description
- * Creates an empty k-ary tree.
- * @param {Node} the root node
+/**
+ * Single argument constructor.
+ * @param {*} [data] data for front node of queue
  * @return {void}
  */
-const KaryTree = function(data){
-  this.root = new Node(data);
-}
-
-/** @description
- * Checks if the given node is a leaf.
- * @param {Node} the node being checked
- * @return {boolean} returns true if node is a leaf
- */
-KaryTree.prototype.isLeaf = function(node){
-  if(typeof node === 'undefined' || node === null){
-    throw new TypeError('Attempting to check the leaves of undefined node in KaryTree.isLeaf');
+const Queue = function(data){
+  this.front;
+  this.back;
+  this.size;
+  if(typeof data !== 'undefined'){
+    this.front = new Node(data);
+    this.back = this.front;
+    this.front.next = this.back;
+    this.back.next = null;
+    this.size = 1;
+  }else{
+    this.front = null;
+    this.back = null;
+    this.size = 0;
   }
-  return (node.children.length === 0);
 }
 
-/** @description
- * Empties the subtree of the given node.
- * @param {Node} the root of the subtree being emptied
+/**
+ * Creates a node with the given data and adds that node
+ * to the back of the queue
+ * @param {*} data for head node of linked list
  * @return {void}
  */
-KaryTree.prototype.emptySubtree = function(node){
-  if(node === null){
-    return;
+Queue.prototype.enqueue = function(data){
+  if(typeof data === 'undefined'){
+    throw new Error("Too few arguments in Queue.enqueue");
   }
-  node.children.map(function(child){
-    this.emptySubtree(child);
-    child = null;
-  }.bind(this));
-  node = null;
+  var newNode = new Node(data);
+  // Check to see if front/back exist
+  if(this.front === null && this.back === null){
+    this.front = newNode;
+    this.back = this.front;
+    this.front.next = this.back;
+    this.back.next = null;
+    ++this.size;
+  }else if(this.front !== null && this.back !== null){
+    // Add to end of the queue
+    this.back.next = newNode;
+    this.back = newNode;
+    ++this.size;
+  }
+  // Both front and back should either be set or null; if not then something went wrong somewhere
+  else{
+    throw new Error("Either front or back is not set in an a queue at once. Please report this to https://github.com/nickzuber/needle/issues");
+  }
 }
 
-/** @description
- * Empties the entire tree.
+/**
+ * Removes the node at the front of the queue
  * @param {void}
  * @return {void}
  */
-KaryTree.prototype.emptyTree = function(){
-  if(this.root === null){
-    throw new Error("Attempted to empty a nulled tree in KaryTree.emptyTree");
+Queue.prototype.dequeue = function(){
+  if(this.size === 0){
+    throw new Error("Attempted to dequeue from empty queue in Queue.enqueue");
   }
-  this.emptySubtree(this.root);
-  this.root = null;
+  // Remove from the front
+  var newHead = this.front.next;
+  this.front = newHead;
+  --this.size;
 }
 
-/** @description
- * Search for a node in the tree.
- * @param {*} the data of the node being searched for
- * @param {Node} [node] the node where to begin the insertion. This should be left blank when called
- *                      because the function default to inserting at the root.
- * @return {Node || false} returns the node if found, and false if not found
- */
-KaryTree.prototype.search = function(data, node){
-  if(node === null){
-    return false;
-  }
-
-  // If node isn't defined, default to the root
-  if(typeof node === 'undefined'){
-    node = this.root;
-  }
-
-  // Check if current node is the one we're looking for
-  if(JSON.stringify(data) ===  JSON.stringify(node.data)){
-    return node;
-  }
-
-  // Traverse through each child
-  node.children.map(function(child){
-    search(data, child);
-  });
-}
-
-module.exports = KaryTree;
+module.exports = Queue;

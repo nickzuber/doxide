@@ -48,10 +48,13 @@ Parser.prototype.parseCommentToken = function(token){
   this.tokenTree.root.appendChild('NODE');
   var tokens = [];
   var data = token.data.content;
-  var tokenizer;
+  var tokenizer = null;
+  var firstCheck = true;
   var lastChildIndex = this.tokenTree.root.children.length - 1;
+
   // Attempt to extract a description
-  var descriptionText = _.EXTRACT_DESC.exec(data)[1] || '';
+  tokenizer = _.EXTRACT_DESC.exec(data);
+  var descriptionText = tokenizer[1];
   tokens.push(new Token(_.DESCRIPTION, descriptionText));
 
   // Parse into tokens with tags
@@ -62,26 +65,40 @@ Parser.prototype.parseCommentToken = function(token){
     }
   }while(tokenizer);
 
+
+
   // Clean the content
   tokens.map(function(tok, index){
+    // Reset regex
+    this.resetRegex();
+
+    // Clean up some content
     tokens[index].label = tok.label.split('@').join('');
     tokens[index].content = tok.content.split('/**').join('');
     tokens[index].content = tok.content.split('*/').join('');
     tokens[index].content = tok.content.split('*').join('');
     tokens[index].content = tok.content.replace(/ +(?= )/g, '').trim();
+
     // If types are defined, we want to split this up
-    if (!_.EXTRACT_TYPE.exec(tok.content) && tok.label !== _.DESCRIPTION) {
-      console.log('\ntoken');
-      console.log(tok.label);
-      console.log('\n');
-    }
     do{
+      // If a param was defined but its type was not specified, throw an error
+      if (firstCheck && tok.label !== _.DESCRIPTION) {
+        throw new Error(`Missing argument type or argument description for a parameter in ${this.taskFile}`);
+      }
+      firstCheck = false;
+
+      // Parse for type
       tokenizer = _.EXTRACT_TYPE.exec(tok.content);
       if(tokenizer) {
         if(typeof tok.type === 'undefined'){
           tok.type = [];
         }
-        tok.type.push(tokenizer[1]);
+        tok.type.push(tokenizer[1] || 'any');
+
+        // If name is unset, set it
+        if (!tok.argName) {
+          tok.argName = tokenizer[2];
+        }
       }
     }while(tokenizer);
     // If names are defined, we want to split this up
@@ -94,16 +111,6 @@ Parser.prototype.parseCommentToken = function(token){
         tok.name.push(tokenizer[1].split(' ')[0]);
       }
     }while(tokenizer);
-    // If descriptions are defined, we want to split this up
-    // do{
-    //   tokenizer = _.EXTRACT_DESC.exec(tok.content);
-    //   if(tokenizer){
-    //     if(typeof tok.description === 'undefined'){
-    //       tok.description = [];
-    //     }
-    //     tok.description.push(tokenizer[3].trim());
-    //   }
-    // }while(tokenizer);
     this.tokenTree.root.children[lastChildIndex].appendChild(tok);
   }.bind(this));
 
@@ -144,6 +151,15 @@ Parser.prototype.parseProtoTypeToken = function(token){
   }.bind(this));
 
   this.state = _.LOOKING_FOR_COMMENT;
+}
+
+Parser.prototype.resetRegex = function () {
+  _.DATA_TYPES.lastIndex = 0;
+  _.PROTO_TYPE.lastIndex = 0;
+  _.TAGFORMAT.lastIndex = 0;
+  _.EXTRACT_DESC.lastIndex = 0;
+  _.EXTRACT_TYPE.lastIndex = 0;
+  _.EXTRACT_NAME.lastIndex = 0;
 }
 
 module.exports = Parser;

@@ -12,9 +12,8 @@ module.exports = {
   PROTO_TYPE          : /(\w+)\.prototype.(\w+)(?:(?:\s*=\s*)(function))?/gmi,
   TAGFORMAT           : /(@[\w]+)([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)/gmi,
   EXTRACT_DESC        : /^([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)(?:@)/gmi,
-  EXTRACT_TYPE        : /(?:{(\w+)})/gi,
+  EXTRACT_TYPE        : /(?:{([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/? ]*)})(?:\s*)([A-Za-z1-9.,!#$\-%|^&*(){}\[\]\'\";:<>\/?]*)/gi,
   EXTRACT_NAME        : /(?:\[([\w| =]+)\])/gi,
-//EXTRACT_DESC        : /(?:{(\w+)})\s*(?:\[([\w| =]+)\])(?:,?)\s*([\w ]+)/gmi,
 
   STARTING            : 0,
   LOOKING_FOR_COMMENT : 1,

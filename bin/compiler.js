@@ -38,15 +38,16 @@ Compiler.prototype.generateHeader = function(node){
 
   node.map(function(innerNode){
     var dataRef = innerNode.data;
+    console.log(dataRef);
     var outputString = '';
     if(dataRef.label === 'header'){
       outputString = _.HEADER.split('{{link}}').join(dataRef.content.toLowerCase());
       outputString = outputString.split('{{header}}').join(dataRef.content);
     }
     else if(dataRef.label === 'property'){
-      outputString = _.PROPERTY.split('{{name}}').join(dataRef.name);
+      outputString = _.PROPERTY.split('{{name}}').join(dataRef.argName);
       outputString = outputString.split('{{type}}').join(dataRef.type);
-      outputString = outputString.split('{{description}}').join(dataRef.description);
+      outputString = outputString.split('{{description}}').join(dataRef.content);
     }
     self.output += outputString;
   });
@@ -56,7 +57,7 @@ Compiler.prototype.generateHeader = function(node){
 
 Compiler.prototype.generateFunction = function(node){
   var self         = this,
-      constructor  = false,
+      _constructor = false,
       paramSoFar   = '',
       lclStart     = _.FUNCTION_START,
       lclParam     = _.PARAMS,
@@ -64,15 +65,22 @@ Compiler.prototype.generateFunction = function(node){
 
 console.log('GENERATING FUNCTION');
 
+  // constructor info will always appear after description info, so we can't check
+  // if the function is a constructor before we replace the description. This reverse
+  // is a cheap trick to make it so that
+  node.reverse();
+
   node.map(function(innerNode){
     var dataRef = innerNode.data;
     console.log(dataRef);
+    // CONSTRUCTOR
     if(dataRef.label === 'constructor'){
-      constructor = true;
+      _constructor = true;
+      lclEnd = lclEnd.split('{{description}}').join(dataRef.content);
     }
     // START
     if(dataRef.label === 'function' || dataRef.label === 'var' || dataRef.label === 'let' || dataRef.label === 'const'){
-      if(constructor){
+      if(_constructor){
         lclStart = lclStart.split('{{function}}').join('(constructor)');
       }else{
         lclStart = lclStart.split('{{function}}').join(dataRef.content);
@@ -84,20 +92,20 @@ console.log('GENERATING FUNCTION');
         paramSoFar += ', '
       }
       paramSoFar += lclParam.split('{{type}}').join(dataRef.type);
-      paramSoFar = paramSoFar.split('{{name}}').join(dataRef.name || 'arg');
+      paramSoFar = paramSoFar.split('{{name}}').join(dataRef.argName);
     }
     // RETURN
     if(dataRef.label === 'return'){
       lclEnd = lclEnd.split('{{return}}').join(dataRef.type);
     }
     // END
-    if(dataRef.label === 'description'){
+    if(dataRef.label === _.DESCRIPTION){
       lclEnd = lclEnd.split('{{description}}').join(dataRef.content);
     }
   });
   self.output += lclStart + paramSoFar + lclEnd;
   this.output += '\n';
-  console.log(`\nOUTPUT:\n${this.output}`)
+  //console.log(`\nOUTPUT:\n${this.output}`)
 };
 
 
