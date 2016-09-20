@@ -154,17 +154,17 @@ function continueProcess(){
           }
         });
       }
-      workOnFileTree();
+      workOnFileTree(revivedData.output);
     });
   }
 }
 
-function workOnFileTree(){
+function workOnFileTree(outputDest){
 
-var outputDest = './output.md';
+  var outputDest = outputDest || './output.md';
 
   // Task files resolved - start lexing and parsing
-  console.log(timeStamp+'Working on '+chalk.blue(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
+  console.log(timeStamp+'Working on '+chalk.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
 
   // Clear target file so we can append new things to it
   try {
@@ -172,7 +172,7 @@ var outputDest = './output.md';
   } catch (err) {
     reportError(err);
   }
-  console.log(`${timeStamp}Cleared ${chalk.magenta(outputDest)} prepping for output...`);
+  console.log(`${timeStamp}Cleared ${chalk.magenta(outputDest)} prepping for output`);
 
   allFiles.map(function(taskFile){
     fs.readFile(taskFile, 'utf8', function(err, data){
@@ -195,7 +195,11 @@ var outputDest = './output.md';
         if (err) {
           reportError(`Unable to write output from ${taskFile} to ${outputDest}.`);
         }
-        console.log(`${timeStamp}Successfully wrote documention from ${chalk.cyan(taskFile)} to ${chalk.magenta(outputDest)}`);
+        var segue = markdownGenerator.flagged ? 'some' : 'all';
+        console.log(`${timeStamp}Successfully wrote ${segue} of ${chalk.cyan(taskFile)} documention from to ${chalk.magenta(outputDest)}`);
+        if (markdownGenerator.flagged) {
+          console.log(`${timeStamp}${chalk.dim.white(` └── Skipped over one or more comment blocks in ${taskFile} due to missing fields.`)}`);
+        }
       });
     });
   });
@@ -269,4 +273,5 @@ function validFilePath(file){
 
 function reportError(err){
   console.log(chalk.bold.red(err));
+  process.exit(2);
 }

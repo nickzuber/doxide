@@ -10,6 +10,8 @@ $ npm install --save-dev node-doxide
 
 ## Usage
 
+<img src="./.github/example.png" />
+
 There are a few different approaches for using Doxide for your application. You can either create a `doxyfile.json` to define a set of files to scan and where to write the output to, or you can manually define these arguments in the command line.
 
 ```

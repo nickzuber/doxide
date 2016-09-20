@@ -10,6 +10,7 @@ const _ = require('./constants');
 
 const Compiler = function(nodeTree){
   this.nodeTree = nodeTree;
+  this.flagged = false;
   this.output = '';
 }
 
@@ -63,7 +64,7 @@ Compiler.prototype.generateFunction = function(node){
       lclParam     = _.PARAMS,
       lclEnd       = _.FUNCTION_END;
 
-// console.log('GENERATING FUNCTION');
+  var checkList = new Array(4).fill(0);
 
   // constructor info will always appear after description info, so we can't check
   // if the function is a constructor before we replace the description. This reverse
@@ -72,7 +73,7 @@ Compiler.prototype.generateFunction = function(node){
 
   node.map(function(innerNode){
     var dataRef = innerNode.data;
-    // console.log(dataRef);
+
     // CONSTRUCTOR
     if(dataRef.label === 'constructor'){
       _constructor = true;
@@ -80,6 +81,7 @@ Compiler.prototype.generateFunction = function(node){
     }
     // START
     if(dataRef.label === 'function' || dataRef.label === 'var' || dataRef.label === 'let' || dataRef.label === 'const'){
+      checkList[0] = 1;
       if(_constructor){
         lclStart = lclStart.split('{{function}}').join('(constructor)');
       }else{
@@ -88,6 +90,7 @@ Compiler.prototype.generateFunction = function(node){
     }
     // PARAMS
     if(dataRef.label === 'param'){
+      checkList[1] = 1;
       if (paramSoFar.length) {
         paramSoFar += ', '
       }
@@ -96,16 +99,22 @@ Compiler.prototype.generateFunction = function(node){
     }
     // RETURN
     if(dataRef.label === 'return'){
+      checkList[2] = 1;
       lclEnd = lclEnd.split('{{return}}').join(dataRef.type);
     }
     // END
     if(dataRef.label === _.DESCRIPTION){
+      checkList[3] = 1;
       lclEnd = lclEnd.split('{{description}}').join(dataRef.content);
     }
   });
-  self.output += lclStart + paramSoFar + lclEnd;
-  this.output += '\n';
-  //// console.log(`\nOUTPUT:\n${this.output}`)
+
+  if (checkList.indexOf(0) === -1) {
+    self.output += lclStart + paramSoFar + lclEnd;
+    this.output += '\n';
+  } else {
+    this.flagged = true;
+  }
 };
 
 

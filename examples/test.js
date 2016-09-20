@@ -3,7 +3,7 @@
  * @property {Node} front the first element in the queue
  * @property {Node} back the last element in the queue
  * @property {number} size the number of nodes in the queue
- *
+ * @notes
  * Asymptotic time complexities
  * +-------------------+
  * | enqueue  |  O(1)  |
