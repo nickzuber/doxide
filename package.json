@@ -1,6 +1,6 @@
 {
   "name": "node-doxide",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A tool for transforming documentation in JavaScript files to markdown.",
   "main": "./bin/doxide.js",
   "scripts": {
