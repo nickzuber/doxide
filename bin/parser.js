@@ -101,7 +101,7 @@ Parser.prototype.parseCommentToken = function(token){
         }
       } else {
         // If a param was defined but its type was not specified, throw an error
-        if (firstCheck && (tok.label === _.PROPERTY ||
+        if (firstCheck && (tok.label === 'property' ||
            tok.label === _.RETURN ||
            tok.label === _.PARAM)) {
           throw new Error(`Missing argument type or argument description for a parameter in ${this.taskFile}`);

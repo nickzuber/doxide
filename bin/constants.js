@@ -29,7 +29,6 @@ module.exports = {
   DESCRIPTION         : 'description',
   RETURN              : 'return',
   PARAM               : 'param',
-  PROPERTY            : 'property',
   CONSTRUCTOR         : 'constructor',
   FUNCTION            : 'function',
   CONST               : 'const',
