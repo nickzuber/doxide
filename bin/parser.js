@@ -77,6 +77,14 @@ Parser.prototype.parseCommentToken = function(token){
     tokens[index].content = tok.content.split('*').join('');
     tokens[index].content = tok.content.replace(/ +(?= )/g, '').trim();
 
+    // Parse for description
+    do {
+      tokenizer = _.EXTRACT_PROPERTY.exec(tok.content);
+      if (tokenizer) {
+        tok.description = tokenizer[3];
+      }
+    } while(tokenizer);
+
     // If types are defined, we want to split this up
     do{
       // If a param was defined but its type was not specified, throw an error
@@ -155,6 +163,7 @@ Parser.prototype.resetRegex = function () {
   _.DATA_TYPES.lastIndex = 0;
   _.PROTO_TYPE.lastIndex = 0;
   _.TAGFORMAT.lastIndex = 0;
+  _.EXTRACT_PROPERTY.lastIndex = 0;
   _.EXTRACT_DESC.lastIndex = 0;
   _.EXTRACT_TYPE.lastIndex = 0;
   _.EXTRACT_NAME.lastIndex = 0;

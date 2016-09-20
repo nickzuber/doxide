@@ -1,5 +1,5 @@
 {
-  "name": "doxide",
+  "name": "node-doxide",
   "version": "0.0.1",
   "description": "A tool for transforming documentation in JavaScript files to markdown.",
   "main": "./bin/doxide.js",

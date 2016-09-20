@@ -5,7 +5,7 @@
 ## Installation
 
 ```
-$ npm install --save-dev node-doxide
+$ npm install --save-dev node-doxide -g
 ```
 
 ## Usage

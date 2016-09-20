@@ -48,7 +48,7 @@ Compiler.prototype.generateHeader = function(node){
     else if(dataRef.label === 'property'){
       outputString = _.PROPERTY.split('{{name}}').join(dataRef.argName);
       outputString = outputString.split('{{type}}').join(dataRef.type);
-      outputString = outputString.split('{{description}}').join(dataRef.content);
+      outputString = outputString.split('{{description}}').join(dataRef.description);
     }
     self.output += outputString;
   });

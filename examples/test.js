@@ -1,8 +1,8 @@
 /** @header
  * Queue
- * @property {Node} front the first element in the queue
- * @property {Node} back the last element in the queue
- * @property {number} size the number of nodes in the queue
+ * @property {Node} front The first element in the queue
+ * @property {Node} back The last element in the queue
+ * @property {number} size The number of nodes in the queue
  * @notes
  * Asymptotic time complexities
  * +-------------------+
@@ -12,63 +12,10 @@
  *
  */
 
-const Node = require('./unidirectional_node.js');
-
 /**
- * Single argument constructor.
- * @param {*} [data] data for front node of queue
- * @return {void}
- */
-const Queue = function(data){
-  this.front;
-  this.back;
-  this.size;
-  if(typeof data !== 'undefined'){
-    this.front = new Node(data);
-    this.back = this.front;
-    this.front.next = this.back;
-    this.back.next = null;
-    this.size = 1;
-  }else{
-    this.front = null;
-    this.back = null;
-    this.size = 0;
-  }
-}
-
-/**
- * Creates a node with the given data and adds that node
- * to the back of the queue
- * @param {*} data for head node of linked list
- * @return {void}
- */
-Queue.prototype.enqueue = function(data){
-  if(typeof data === 'undefined'){
-    throw new Error("Too few arguments in Queue.enqueue");
-  }
-  var newNode = new Node(data);
-  // Check to see if front/back exist
-  if(this.front === null && this.back === null){
-    this.front = newNode;
-    this.back = this.front;
-    this.front.next = this.back;
-    this.back.next = null;
-    ++this.size;
-  }else if(this.front !== null && this.back !== null){
-    // Add to end of the queue
-    this.back.next = newNode;
-    this.back = newNode;
-    ++this.size;
-  }
-  // Both front and back should either be set or null; if not then something went wrong somewhere
-  else{
-    throw new Error("Either front or back is not set in an a queue at once. Please report this to https://github.com/nickzuber/needle/issues");
-  }
-}
-
-/**
- * Removes the node at the front of the queue
- * @param {void}
+ * Removes the `node` at the front of the queue
+ * @param {string} str A description.
+ * @param {number} num A description.
  * @return {void}
  */
 Queue.prototype.dequeue = function(){
