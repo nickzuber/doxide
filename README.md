@@ -80,6 +80,7 @@ $ doxide main.js component.jsx router.js -o docs/output.md
 [02:03:28] Successfully wrote all of main.js documention from to output.md
 [02:03:28] Successfully wrote all of component.jsx documention from to output.md
 [02:03:28] Successfully wrote all of router.js documention from to output.md
+[02:03:28] Finished after 15 ms
 ```
 
 ## License
