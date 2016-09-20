@@ -94,13 +94,13 @@ $ doxide main.js component.jsx router.js -o docs/output.md
 
 ## <a href="#faq" name="faq">FAQ</a>
 
-#### Skipped over one or more comment blocks in .... due to missing fields.
+### Skipped over one or more comment blocks in .... due to missing fields.
 
 While parsing through the documentation comments in a file, sometimes there hasn't been enough information provided for a particular block to be able to fill out the markdown function template. When this happens, we simply skip over that block and let you know that we've done so.
 
 "Missing fields" could be something like a documentation block that wasn't given a function to document, but for things like a missing type definition in a `param` tag, we will throw an error.
 
-#### Unable to access the file ./.../.....md
+### Unable to access the file ./.../.....md
 
 If you try to set your output destination to a file within a directory that doesn't yet exist, we'll throw an error. Sending the output to a non existent file is fine, so long as we can _get_ there. The directory must first exist.
 
