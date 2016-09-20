@@ -49,7 +49,6 @@ Parser.prototype.parseCommentToken = function(token){
   var tokens = [];
   var data = token.data.content;
   var tokenizer = null;
-  var firstCheck = true;
   var lastChildIndex = this.tokenTree.root.children.length - 1;
 
   // Attempt to extract a description
@@ -69,6 +68,7 @@ Parser.prototype.parseCommentToken = function(token){
   tokens.map(function(tok, index){
     // Reset regex
     this.resetRegex();
+    let firstCheck = true;
 
     // Clean up some content
     tokens[index].label = tok.label.split('@').join('');
@@ -87,12 +87,6 @@ Parser.prototype.parseCommentToken = function(token){
 
     // If types are defined, we want to split this up
     do{
-      // If a param was defined but its type was not specified, throw an error
-      if (firstCheck && tok.label !== _.DESCRIPTION) {
-        throw new Error(`Missing argument type or argument description for a parameter in ${this.taskFile}`);
-      }
-      firstCheck = false;
-
       // Parse for type
       tokenizer = _.EXTRACT_TYPE.exec(tok.content);
       if(tokenizer) {
@@ -105,7 +99,15 @@ Parser.prototype.parseCommentToken = function(token){
         if (!tok.argName) {
           tok.argName = tokenizer[2];
         }
+      } else {
+        // If a param was defined but its type was not specified, throw an error
+        if (firstCheck && (tok.label === _.PROPERTY ||
+           tok.label === _.RETURN ||
+           tok.label === _.PARAM)) {
+          throw new Error(`Missing argument type or argument description for a parameter in ${this.taskFile}`);
+        }
       }
+      firstCheck = false;
     }while(tokenizer);
     // If names are defined, we want to split this up
     do{

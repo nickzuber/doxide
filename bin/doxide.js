@@ -195,7 +195,11 @@ function workOnFileTree(outputDest){
         reportError(e);
       }
       var parser = new Parser(taskFile, tokenizer.tokenList);
-      parser.generateTokenTree();
+      try{
+        parser.generateTokenTree();
+      }catch(e){
+        reportError(e);
+      }
       var markdownGenerator = new Compiler(parser.tokenTree);
       markdownGenerator.compile();
 
