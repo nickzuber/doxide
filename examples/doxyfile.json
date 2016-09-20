@@ -2,5 +2,5 @@
   "targets" : [
     "./"
   ],
-  "output" : "./docs"
+  "output" : "./output.md"
 }
