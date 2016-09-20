@@ -18,7 +18,7 @@ process.env.INIT_CWD = process.cwd();
 var allFiles = [];
 var localDoxy = false;
 var currentTimeReference = new Date();
-var timeStamp = '['+chalk.dim.cyan(('0'+currentTimeReference.getHours()).slice(-2)+':'+('0'+currentTimeReference.getMinutes()).slice(-2)+':'+('0'+currentTimeReference.getSeconds()).slice(-2))+'] ';
+var timeStamp = '['+chalk.gray(('0'+currentTimeReference.getHours()).slice(-2)+':'+('0'+currentTimeReference.getMinutes()).slice(-2)+':'+('0'+currentTimeReference.getSeconds()).slice(-2))+'] ';
 
 // List of directories we will never want to search that possibly can
 // be harmful to this program if they're attempted to be searched.
@@ -160,8 +160,20 @@ function continueProcess(){
 }
 
 function workOnFileTree(){
-  // Task files resolved - let's start lexing and parsing
-  console.log(timeStamp+'Working on '+chalk.dim.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
+
+var outputDest = './output.md';
+
+  // Task files resolved - start lexing and parsing
+  console.log(timeStamp+'Working on '+chalk.blue(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
+
+  // Clear target file so we can append new things to it
+  try {
+    fs.writeFileSync(outputDest, '', 'utf8');
+  } catch (err) {
+    reportError(err);
+  }
+  console.log(`${timeStamp}Cleared ${chalk.magenta(outputDest)} prepping for output...`);
+
   allFiles.map(function(taskFile){
     fs.readFile(taskFile, 'utf8', function(err, data){
       if(err){
@@ -177,8 +189,14 @@ function workOnFileTree(){
       parser.generateTokenTree();
       var markdownGenerator = new Compiler(parser.tokenTree);
       markdownGenerator.compile();
-      console.log('\n\n');
-      console.log(markdownGenerator.output);
+
+      // Write to destination
+      fs.appendFile(outputDest, markdownGenerator.output, function (err) {
+        if (err) {
+          reportError(`Unable to write output from ${taskFile} to ${outputDest}.`);
+        }
+        console.log(`${timeStamp}Successfully wrote documention from ${chalk.cyan(taskFile)} to ${chalk.magenta(outputDest)}`);
+      });
     });
   });
 }

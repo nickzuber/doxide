@@ -54,7 +54,7 @@ Parser.prototype.parseCommentToken = function(token){
 
   // Attempt to extract a description
   tokenizer = _.EXTRACT_DESC.exec(data);
-  var descriptionText = tokenizer[1];
+  var descriptionText = tokenizer && tokenizer[1] || '_no description provided_';
   tokens.push(new Token(_.DESCRIPTION, descriptionText));
 
   // Parse into tokens with tags
@@ -64,8 +64,6 @@ Parser.prototype.parseCommentToken = function(token){
       tokens.push(new Token(tokenizer[1], tokenizer[2]));
     }
   }while(tokenizer);
-
-
 
   // Clean the content
   tokens.map(function(tok, index){

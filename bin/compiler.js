@@ -16,7 +16,7 @@ const Compiler = function(nodeTree){
 Compiler.prototype.compile = function(){
   var nodeTree = this.nodeTree,
           self = this;
-  console.log('TOKEN TREE HAS ' + nodeTree.root.children.length + ' CHILDREN');
+  // console.log('TOKEN TREE HAS ' + nodeTree.root.children.length + ' CHILDREN');
   nodeTree.root.children.map(function(node){
     var nodeLabels = [];
     for(var i=0; i<node.children.length; ++i){
@@ -34,11 +34,11 @@ Compiler.prototype.compile = function(){
 Compiler.prototype.generateHeader = function(node){
   var self = this;
 
-  console.log('GENERATING HEADER');
+  // console.log('GENERATING HEADER');
 
   node.map(function(innerNode){
     var dataRef = innerNode.data;
-    console.log(dataRef);
+    // console.log(dataRef);
     var outputString = '';
     if(dataRef.label === 'header'){
       outputString = _.HEADER.split('{{link}}').join(dataRef.content.toLowerCase());
@@ -52,7 +52,7 @@ Compiler.prototype.generateHeader = function(node){
     self.output += outputString;
   });
   this.output += '\n';
-  console.log(this.output)
+  // console.log(this.output)
 };
 
 Compiler.prototype.generateFunction = function(node){
@@ -63,7 +63,7 @@ Compiler.prototype.generateFunction = function(node){
       lclParam     = _.PARAMS,
       lclEnd       = _.FUNCTION_END;
 
-console.log('GENERATING FUNCTION');
+// console.log('GENERATING FUNCTION');
 
   // constructor info will always appear after description info, so we can't check
   // if the function is a constructor before we replace the description. This reverse
@@ -72,7 +72,7 @@ console.log('GENERATING FUNCTION');
 
   node.map(function(innerNode){
     var dataRef = innerNode.data;
-    console.log(dataRef);
+    // console.log(dataRef);
     // CONSTRUCTOR
     if(dataRef.label === 'constructor'){
       _constructor = true;
@@ -105,7 +105,7 @@ console.log('GENERATING FUNCTION');
   });
   self.output += lclStart + paramSoFar + lclEnd;
   this.output += '\n';
-  //console.log(`\nOUTPUT:\n${this.output}`)
+  //// console.log(`\nOUTPUT:\n${this.output}`)
 };
 
 
