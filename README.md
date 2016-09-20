@@ -60,10 +60,6 @@ Example of the `doxyfile.json` being used for [Needle](https://github.com/nickzu
 
 ```
 
-## API Reference
-
-...
-
 ## Examples
 
 Using a `doxyfile.json`
