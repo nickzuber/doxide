@@ -33,11 +33,32 @@ Usage: doxide <command>
 
 ### Using CLI arguments
 
-...
+```
+$ doxide path/to/file -o path/to/output
+```
 
 ### Using doxyfile.json
 
-...
+A `doxyfile.json` consists of a few main fields:
+
+ - targets
+ - output
+
+The `targets` field consist of an array of files that are to be parsed by Doxide. Being an array, it can consist of a single file or multiple files. You can also include a path to a directory here, and it's important to note that the directory will include all subdirectories within.
+
+The `output` field is a single string of the name of the file to write the output to. If no output destination is specified, the compiler will default to writing the output to the console.
+
+Example of the `doxyfile.json` being used for [Needle](https://github.com/nickzuber/needle) which parses every source file and then stores the results into a single markdown file:
+
+```json
+{
+  "targets" : [
+    "./src"
+  ],
+  "output" : "./docs/doxide_output.md"
+}
+
+```
 
 ## API Reference
 
@@ -55,7 +76,14 @@ $ doxide
 Using the cli arguments
 
 ```
-$ doxide path/to/file -o path/to/output
+$ doxide main.js component.jsx router.js -o docs/output.md
+
+[02:03:28] Attempting to fetch files
+[02:03:28] Working on 3 files
+[02:03:28] Cleared docs/output.md prepping for output
+[02:03:28] Successfully wrote all of main.js documention from to output.md
+[02:03:28] Successfully wrote all of component.jsx documention from to output.md
+[02:03:28] Successfully wrote all of router.js documention from to output.md
 ```
 
 ## License

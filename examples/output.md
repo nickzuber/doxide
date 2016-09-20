@@ -11,13 +11,9 @@
  - **THING**(< _number_ >a) - *number* - The description of some function b.
 
 ### <a href="#queue" name="queue">Needle.Queue()</a>
-**front** - *Node* - {Node} front the first element in the queue.
-**back** - *Node* - {Node} back the last element in the queue.
-**size** - *number* - {number} size the number of nodes in the queue.
+**front** - *Node* -  The first element in the queue.
+**back** - *Node* -  The last element in the queue.
+**size** - *number* -  The number of nodes in the queue.
 
- - **Queue**(< _any_ >[data]) - *void* - Single argument constructor.
-
- - **enqueue**(< _any_ >data) - *void* - Creates a node with the given data and adds that node to the back of the queue
-
- - **dequeue**(< _void_ >) - *void* - Removes the node at the front of the queue
+ - **dequeue**(< _number_ >num, < _string_ >str) - *void* - Removes the `node` at the front of the queue
 

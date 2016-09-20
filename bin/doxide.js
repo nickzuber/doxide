@@ -6,10 +6,10 @@ const chalk = require('chalk');
 const Lexer = require('./lexer');
 const Parser = require('./parser');
 const Compiler = require('./compiler');
+const Promise = require('bluebird');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
-
-//       Search current directory for doxyfile.json - if not found, shouldn't matter; fall back on command line args
+const appendFile = Promise.promisify(fs.appendFile);
 
 // Set env to original cwd
 process.env.INIT_CWD = process.cwd();
@@ -17,8 +17,11 @@ process.env.INIT_CWD = process.cwd();
 // All files to process
 var allFiles = [];
 var localDoxy = false;
+var CLIOutputDest = null;
+var revivedData = null;
 var currentTimeReference = new Date();
 var timeStamp = '['+chalk.gray(('0'+currentTimeReference.getHours()).slice(-2)+':'+('0'+currentTimeReference.getMinutes()).slice(-2)+':'+('0'+currentTimeReference.getSeconds()).slice(-2))+'] ';
+var startTime = new Date();
 
 // List of directories we will never want to search that possibly can
 // be harmful to this program if they're attempted to be searched.
@@ -31,11 +34,10 @@ var blackListedDirectories = [
 if(Object.getOwnPropertyNames(argv).length > 1){
   Object.getOwnPropertyNames(argv).filter(function(flag){
     if(flag === '_') return false;
-    resolveFlag(flag);
+    resolveFlag(flag, argv[flag]);
   });
-}else{
-  continueProcess();
 }
+continueProcess();
 
 // Begin to parse and tokenize command line arguments
 function continueProcess(){
@@ -98,13 +100,13 @@ function continueProcess(){
         }
       }
     });
-    workOnFileTree();
   }else{
+    console.log(timeStamp+'Using information from '+chalk.magenta('doxyfile.json'));
     fs.readFile('./doxyfile.json', 'utf8', function(err, data){
       if(err){
         reportError("Error occured when attempting to read file: doxyfile.json\n\n"+err.message);
       }
-      var revivedData = JSON.parse(data);
+      revivedData = JSON.parse(data);
       if(typeof revivedData.targets === 'string'){
         allFiles.push(revivedData.targets);
       }else{
@@ -154,26 +156,29 @@ function continueProcess(){
           }
         });
       }
-      workOnFileTree(revivedData.output);
     });
   }
+  var outputDest = (revivedData && revivedData.output) ||
+                    CLIOutputDest ||
+                    null;
+  workOnFileTree(outputDest);
 }
 
 function workOnFileTree(outputDest){
-
-  var outputDest = outputDest || './output.md';
-
   // Task files resolved - start lexing and parsing
   console.log(timeStamp+'Working on '+chalk.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
 
-  // Clear target file so we can append new things to it
-  try {
-    fs.writeFileSync(outputDest, '', 'utf8');
-  } catch (err) {
-    reportError(err);
+  if (outputDest) {
+    // Clear target file so we can append new things to it
+    try {
+      fs.writeFileSync(outputDest, '', 'utf8');
+    } catch (err) {
+      reportError(`Unable to access the file ${outputDest}: \n${err}`);
+    }
+    console.log(`${timeStamp}Cleared ${chalk.magenta(outputDest)} prepping for output`);
   }
-  console.log(`${timeStamp}Cleared ${chalk.magenta(outputDest)} prepping for output`);
 
+  var finishedFiles = 0;
   allFiles.map(function(taskFile){
     fs.readFile(taskFile, 'utf8', function(err, data){
       if(err){
@@ -190,19 +195,38 @@ function workOnFileTree(outputDest){
       var markdownGenerator = new Compiler(parser.tokenTree);
       markdownGenerator.compile();
 
-      // Write to destination
-      fs.appendFile(outputDest, markdownGenerator.output, function (err) {
-        if (err) {
-          reportError(`Unable to write output from ${taskFile} to ${outputDest}.`);
-        }
+      if (outputDest) {
+        // Write to destination
+        appendFile(outputDest, markdownGenerator.output).then(function (content, err) {
+          if (err) {
+            reportError(`Unable to write output from ${taskFile} to ${outputDest}.`);
+          }
+          var segue = markdownGenerator.flagged ? 'some' : 'all';
+          console.log(`${timeStamp}Successfully wrote ${segue} of ${chalk.cyan(taskFile)} documention from to ${chalk.magenta(outputDest)}`);
+          if (markdownGenerator.flagged) {
+            console.log(`${timeStamp}${chalk.dim.white(` └── Skipped over one or more comment blocks in ${taskFile} due to missing fields.`)}`);
+          }
+          if (++finishedFiles === allFiles.length) {
+            finishProcess();
+          }
+        });
+      }
+      // If no output destination, print to console
+      else {
         var segue = markdownGenerator.flagged ? 'some' : 'all';
-        console.log(`${timeStamp}Successfully wrote ${segue} of ${chalk.cyan(taskFile)} documention from to ${chalk.magenta(outputDest)}`);
+        console.log(`${timeStamp}Successfully wrote ${segue} of ${chalk.cyan(taskFile)} documention from to console:\n`);
         if (markdownGenerator.flagged) {
           console.log(`${timeStamp}${chalk.dim.white(` └── Skipped over one or more comment blocks in ${taskFile} due to missing fields.`)}`);
         }
-      });
+        console.log(markdownGenerator.output);
+      }
     });
   });
+}
+
+function finishProcess () {
+  var endTime = new Date();
+  console.log(`${timeStamp}Finished after ${chalk.magenta(endTime - startTime)} ms`);
 }
 
 function recurseAllFilesInDirectory(path, allFiles){
@@ -228,24 +252,31 @@ function recurseAllFilesInDirectory(path, allFiles){
   });
 }
 
-function resolveFlag(flag){
-  console.log(chalk.bold.white('\nUsage: doxide <command>\n'));
-  console.log(chalk.bold.white('  Possible <commands> could be:\n'));
+function resolveFlag(flag, value){
   switch(flag){
     case 'h':
     case 'help':
-      console.log(chalk.bold.white('  doxide                             Compiles based on your doxyfile.json'));
-      console.log(chalk.bold.white('  doxide --h                         Prompts the help screen'));
-      console.log(chalk.bold.white('  doxide --help                      Prompts the help screen'));
-      console.log(chalk.bold.white('  doxide <file>                      Compiles <file>'));
-      console.log(chalk.bold.white('  doxide <directory>                 Compiles all valid files in <directory>'));
-      console.log(chalk.bold.white('  doxide <file1> -o <file2>          Compiles <file1> and stores output in <file2>'));
-      console.log(chalk.bold.white('  doxide <directory> -o <file>       Compiles all valid files in <directory> and stores output in <file>'));
+      console.log(chalk.white('\nUsage: doxide <command>\n'));
+      console.log(chalk.white('  Possible <commands> could be:\n'));
+      console.log(chalk.white('  doxide                             Compiles based on your doxyfile.json'));
+      console.log(chalk.white('  doxide --h                         Prompts the help screen'));
+      console.log(chalk.white('  doxide --help                      Prompts the help screen'));
+      console.log(chalk.white('  doxide <file>                      Compiles <file>'));
+      console.log(chalk.white('  doxide <directory>                 Compiles all valid files in <directory>'));
+      console.log(chalk.white('  doxide <file1> -o <file2>          Compiles <file1> and stores output in <file2>'));
+      console.log(chalk.white('  doxide <directory> -o <file>       Compiles all valid files in <directory> and stores output in <file>'));
+      process.exit(1);
+      break;
+    case 'o':
+      if (typeof value !== 'boolean') {
+        CLIOutputDest = value;
+      }
       break;
     default:
-      console.log(chalk.bold.white('Unrecognized command: ') + chalk.bold.red(flag));
-      console.log(chalk.bold.white('Here is a list of possible <commands>:'));
-      console.log(chalk.bold.white('  --h\n  --help\n  -c\n  -o\n  '));
+      console.log(chalk.white('Unrecognized command: ') + chalk.bold.red(flag));
+      console.log(chalk.white('Here is a list of possible <commands>:'));
+      console.log(chalk.white('  --h\n  --help\n  -o\n  '));
+      process.exit(1);
   }
 }
 
