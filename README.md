@@ -4,12 +4,12 @@
 
 ## Quick Access
 
- - <a href="installation">Installation</a>
- - <a href="usage">Usage</a>
-  - <a href="cli">CLI</a>
-  - <a href="doxyfile">doxyfile</a>
- - <a href="examples">Examples</a>
- - <a href="faq">FAQ</a>
+ - <a href="#installation">Installation</a>
+ - <a href="#usage">Usage</a>
+  - <a href="#cli">CLI</a>
+  - <a href="#doxyfile">doxyfile</a>
+ - <a href="#examples">Examples</a>
+ - <a href="#faq">FAQ</a>
 
 ## <a href="#installation" name="installation">Installation</a>
 
