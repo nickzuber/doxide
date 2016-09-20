@@ -11,13 +11,13 @@
  - <a href="#examples">Examples</a>
  - <a href="#faq">FAQ</a>
 
-## <a href="#installation" name="installation">Installation</a>
+## <a name="installation">Installation</a>
 
 ```
 $ npm install --save-dev node-doxide -g
 ```
 
-## <a href="#usage" name="usage">Usage</a>
+## <a name="usage">Usage</a>
 
 <img src="./.github/example.png" />
 
@@ -40,13 +40,13 @@ Usage: doxide <command>
 ```
 
 
-### <a href="#cli" name="cli">Using CLI arguments</a>
+### <a name="cli">Using CLI arguments</a>
 
 ```
 $ doxide path/to/file -o path/to/output
 ```
 
-### <a href="#doxyfile" name="doxyfile">Using doxyfile.json</a>
+### <a name="doxyfile">Using doxyfile.json</a>
 
 A `doxyfile.json` consists of a few main fields:
 
@@ -69,7 +69,7 @@ Example of the `doxyfile.json` being used for [Needle](https://github.com/nickzu
 
 ```
 
-## <a href="#examples" name="example">Examples</a>
+## <a name="example">Examples</a>
 
 Using a `doxyfile.json`
 
@@ -92,7 +92,7 @@ $ doxide main.js component.jsx router.js -o docs/output.md
 [02:03:28] Finished after 15 ms
 ```
 
-## <a href="#faq" name="faq">FAQ</a>
+## <a name="faq">FAQ</a>
 
 ### Skipped over one or more comment blocks in .... due to missing fields.
 
