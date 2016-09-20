@@ -28,6 +28,7 @@
   ],
   "homepage": "https://github.com/nickzuber/doxide#readme",
   "dependencies": {
+    "bluebird": "^3.4.6",
     "chalk": "^1.1.1",
     "minimist": "^1.2.0",
     "node-needle": "^0.1.7"
