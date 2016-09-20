@@ -10,6 +10,7 @@ const Promise = require('bluebird');
 const argv = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 const appendFile = Promise.promisify(fs.appendFile);
+const readFile = Promise.promisify(fs.readFile);
 
 // Set env to original cwd
 process.env.INIT_CWD = process.cwd();
@@ -100,9 +101,12 @@ function continueProcess(){
         }
       }
     });
+    var outputDest =  CLIOutputDest ||
+                      null;
+    workOnFileTree(outputDest);
   }else{
     console.log(timeStamp+'Using information from '+chalk.magenta('doxyfile.json'));
-    fs.readFile('./doxyfile.json', 'utf8', function(err, data){
+    readFile('./doxyfile.json', 'utf8').then(function (data, err) {
       if(err){
         reportError("Error occured when attempting to read file: doxyfile.json\n\n"+err.message);
       }
@@ -156,12 +160,12 @@ function continueProcess(){
           }
         });
       }
+      var outputDest = revivedData.output ||
+                        CLIOutputDest ||
+                        null;
+      workOnFileTree(outputDest);
     });
   }
-  var outputDest = (revivedData && revivedData.output) ||
-                    CLIOutputDest ||
-                    null;
-  workOnFileTree(outputDest);
 }
 
 function workOnFileTree(outputDest){
