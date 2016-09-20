@@ -75,12 +75,15 @@ Compiler.prototype.generateFunction = function(node){
     var dataRef = innerNode.data;
 
     // CONSTRUCTOR
-    if(dataRef.label === 'constructor'){
+    if(dataRef.label === _.CONSTRUCTOR){
       _constructor = true;
       lclEnd = lclEnd.split('{{description}}').join(dataRef.content);
     }
     // START
-    if(dataRef.label === 'function' || dataRef.label === 'var' || dataRef.label === 'let' || dataRef.label === 'const'){
+    if(dataRef.label === _.FUNCTION ||
+       dataRef.label === _.VAR ||
+       dataRef.label === _.LET ||
+       dataRef.label === _.CONST) {
       checkList[0] = 1;
       if(_constructor){
         lclStart = lclStart.split('{{function}}').join('(constructor)');
@@ -89,7 +92,7 @@ Compiler.prototype.generateFunction = function(node){
       }
     }
     // PARAMS
-    if(dataRef.label === 'param'){
+    if(dataRef.label === _.PARAM){
       checkList[1] = 1;
       if (paramSoFar.length) {
         paramSoFar += ', '
@@ -98,7 +101,7 @@ Compiler.prototype.generateFunction = function(node){
       paramSoFar = paramSoFar.split('{{name}}').join(dataRef.argName);
     }
     // RETURN
-    if(dataRef.label === 'return'){
+    if(dataRef.label === _.RETURN){
       checkList[2] = 1;
       lclEnd = lclEnd.split('{{return}}').join(dataRef.type);
     }

@@ -25,6 +25,13 @@ module.exports = {
   PARAMS              : '< _{{type}}_ >{{name}}',
   FUNCTION_END        : ') - *{{return}}* - {{description}}\n',
 
-  DESCRIPTION         : 'description'
+  DESCRIPTION         : 'description',
+  RETURN              : 'return',
+  PARAM               : 'param',
+  CONSTRUCTOR         : 'constructor',
+  FUNCTION            : 'function',
+  CONST               : 'const',
+  LET                 : 'let',
+  VAR                 : 'var',
 
 }
