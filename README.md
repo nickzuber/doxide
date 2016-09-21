@@ -2,7 +2,7 @@
 
 > A tool for transforming jsDoc style documentation in JavaScript files into API documentation in markdown.
 
-## Quick Access
+## Getting Started
 
  - <a href="#installation">Installation</a>
  - <a href="#usage">Usage</a>
