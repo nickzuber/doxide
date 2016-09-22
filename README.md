@@ -5,6 +5,7 @@
 ## Getting Started
 
  - <a href="#installation">Installation</a>
+ - <a href="#documentation">Documentation Syntax</a>
  - <a href="#usage">Usage</a>
   - <a href="#cli">CLI</a>
   - <a href="#doxyfile">doxyfile</a>
@@ -16,6 +17,86 @@
 ```
 $ npm install --save-dev node-doxide -g
 ```
+
+## <a name="documentation">Documentation Syntax</a>
+
+### Functions
+
+#### @constructors
+
+You have the ability to explicitly define a function as a constructor -- this just slightly changes the result of the markdown that's generated to accurately reflect the fact that this function is a constructor. You can follow this tag with the function's description.
+
+```
+/**
+ * @constructor
+ * Defines the function being described as a constructor.
+ */
+const MyObjectConstructor = function () {
+  // ...
+}
+```
+
+#### @param
+
+You must include the argument type within `{}` -- if the type can be anything, you can simply write `{*}` or `{any}`. You can follow the argument type with a description of the argument and the role it provides.
+
+```
+/**
+ * @param {type} argName This is a description of this parameter.
+ */
+function (argName) {
+  // ...
+}
+```
+
+#### @return
+
+You must include the return type within `{}` -- if there is no return type, simply write `{void}`. You can follow the return type with a description of what's being returned.
+
+```
+/**
+ * @return {type} This is a description of what the function returns.
+ */
+function () {
+  // ...
+}
+```
+
+### Headers (BETA)
+
+#### @header
+
+...
+
+```
+/**
+ * @header
+ * HeaderName
+ */
+```
+
+#### @property
+
+...
+
+```
+/**
+ * @property {type} propName This is a description of this property.
+ */
+```
+
+## Sample Output
+
+---
+
+### <a href="#header" name="header">Header()</a>
+**front** - *Node* -  The first element in the queue.<br />
+**back** - *Node* -  The last element in the queue.<br />
+**size** - *number* -  The number of nodes in the queue.<br />
+
+ - **someFunc**(< _number_ >num, < _string_ >str) - *void* - Description of the return type of the function.
+
+---
 
 ## <a name="usage">Usage</a>
 
