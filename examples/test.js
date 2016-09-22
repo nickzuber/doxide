@@ -1,5 +1,5 @@
 /** @header
- * Queue
+ * Needle.Queue
  * @property {Node} front The first element in the queue
  * @property {Node} back The last element in the queue
  * @property {number} size The number of nodes in the queue

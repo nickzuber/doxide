@@ -20,7 +20,7 @@ module.exports = {
   LOOKING_FOR_COMMENT : 1,
   FOUND_A_COMMENT     : 2,
 
-  HEADER              : '\n### <a href="#{{link}}" name="{{link}}">Needle.{{header}}()</a>\n',
+  HEADER              : '\n### <a href="#{{link}}" name="{{link}}">{{header}}()</a>\n',
   PROPERTY            : '**{{name}}** - *{{type}}* - {{description}}.<br />\n',
   FUNCTION_START      : ' - **{{function}}**(',
   PARAMS              : '< _{{type}}_ >{{name}}',
