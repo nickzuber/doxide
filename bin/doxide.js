@@ -2,18 +2,37 @@
 
 'use strict';
 
-const chalk = require('chalk');
 const Lexer = require('./lexer');
 const Parser = require('./parser');
 const Compiler = require('./compiler');
 const Promise = require('bluebird');
+const ProgressBar = require('progress');
 const argv = require('minimist')(process.argv.slice(2));
+const chalk = require('chalk');
 const fs = require('fs');
 const appendFile = Promise.promisify(fs.appendFile);
 const readFile = Promise.promisify(fs.readFile);
 
 // Set env to original cwd
 process.env.INIT_CWD = process.cwd();
+
+function initProgressBar () {
+  var width = process.stdout.columns;
+  var bar = new ProgressBar('╢:bar', {
+    complete: '▓',
+    incomplete: '░',
+    width: width,
+    total: 6
+  });
+  return bar;
+}
+
+// Disabling progress bar since it screws up the console output. Have to find a way
+// to fix that.
+// const bar = initProgressBar();
+const bar = {
+  tick: function () {}
+};
 
 // All files to process
 var allFiles = [];
@@ -32,7 +51,7 @@ var blackListedDirectories = [
 ];
 
 // Check argv for flags
-if(Object.getOwnPropertyNames(argv).length > 1){
+if(Object.getOwnPropertyNames(argv).length > 1) {
   Object.getOwnPropertyNames(argv).filter(function(flag){
     if(flag === '_') return false;
     resolveFlag(flag, argv[flag]);
@@ -41,9 +60,10 @@ if(Object.getOwnPropertyNames(argv).length > 1){
 continueProcess();
 
 // Begin to parse and tokenize command line arguments
-function continueProcess(){
+function continueProcess() {
+  bar.tick();
   if(!argv._.length){
-    if(!checkForDoxyFile()){
+    if(!checkForDoxyFile()) {
       resolveFlag('h');
       process.exit(0);
     }else{
@@ -169,6 +189,7 @@ function continueProcess(){
 }
 
 function workOnFileTree(outputDest){
+  bar.tick();
   // Task files resolved - start lexing and parsing
   console.log(timeStamp+'Working on '+chalk.cyan(allFiles.length)+' file'+(allFiles.length > 1 ? 's' : ''));
 
@@ -188,6 +209,7 @@ function workOnFileTree(outputDest){
       if(err){
         reportError("Error occured when attempting to read file: "+taskFile+'\n\n'+err.message);
       }
+      bar.tick();
       var tokenizer = new Lexer(taskFile, data);
       try{
         tokenizer.generateTokens();
@@ -202,6 +224,7 @@ function workOnFileTree(outputDest){
       }
       var markdownGenerator = new Compiler(parser.tokenTree);
       markdownGenerator.compile();
+      bar.tick();
 
       if (outputDest) {
         // Write to destination
@@ -233,8 +256,11 @@ function workOnFileTree(outputDest){
 }
 
 function finishProcess () {
+  bar.tick();
   var endTime = new Date();
-  console.log(`${timeStamp}Finished after ${chalk.magenta(endTime - startTime)} ms`);
+  if (bar.complete) {
+    console.log(`${timeStamp}Finished after ${chalk.magenta(endTime - startTime)} ms`);
+  }
 }
 
 function recurseAllFilesInDirectory(path, allFiles){
