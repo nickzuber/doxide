@@ -28,7 +28,7 @@ $ npm install --save-dev node-doxide -g
 
 You have the ability to explicitly define a function as a constructor -- this just slightly changes the result of the markdown that's generated to accurately reflect the fact that this function is a constructor. You can follow this tag with the function's description.
 
-```
+```js
 /**
  * @constructor
  * Defines the function being described as a constructor.
@@ -42,7 +42,7 @@ const MyObjectConstructor = function () {
 
 You must include the argument type within `{}` -- if the type can be anything, you can simply write `{*}` or `{any}`. You can follow the argument type with a description of the argument and the role it provides.
 
-```
+```js
 /**
  * @param {type} argName This is a description of this parameter.
  */
@@ -55,7 +55,7 @@ function (argName) {
 
 You must include the return type within `{}` -- if there is no return type, simply write `{void}`. You can follow the return type with a description of what's being returned.
 
-```
+```js
 /**
  * @return {type} This is a description of what the function returns.
  */
@@ -70,7 +70,7 @@ function () {
 
 ...
 
-```
+```js
 /**
  * @header
  * HeaderName
@@ -81,7 +81,7 @@ function () {
 
 ...
 
-```
+```js
 /**
  * @property {type} propName This is a description of this property.
  */
