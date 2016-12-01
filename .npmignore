@@ -4,10 +4,12 @@ node_modules
 
 # Various other directories
 build
-examples
+scripts
 benchmarks
 unit
 
 .gulpfile
 .travis.yml
 npm-debug.log
+.DS_Store
+output.md

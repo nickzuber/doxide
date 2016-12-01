@@ -1,6 +1,6 @@
 build
 node_modules
-examples/scripts
+scripts/scripts
 *.json
 *.md
 LICENSE
